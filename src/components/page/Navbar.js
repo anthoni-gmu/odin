@@ -1,10 +1,61 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import Alert from '../Alert'
+import Dropauth from '../../components/auth/dropAuth'
+import Navcar from '../../components/cart/Navcar'
+import { connect } from 'react-redux'
+import { NavLink, Link, Navigate } from 'react-router-dom'
+import { Fragment, useEffect, useState } from 'react'
 
 
- const Navbar = () => {
+const Navbar = ({
+  isAuthenticated,
+  user,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+  const welcomeLinks = (
+    <ul className="flex items-center hidden space-x-8 lg:flex">
+      <li>
+        <Link
+          to="/login"
+          aria-label="Sign in"
+          title="Sign in"
+          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+        >
+          Ingresar
+        </Link>
+      </li>
+      <li>
+        <Link
+          to="/signup"
+          className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+          aria-label="Sign up"
+          title="Sign up"
+        >
+          Registrate
+        </Link>
+      </li>
+    </ul>
+  )
+
+  const searchinput = (
+    <>
+      <fieldset className="w-full space-y-1   border rounded-md">
+        <label htmlFor="Search" className="hidden">Search</label>
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+            <button type="button" title="search" className="p-1 focus:outline-none focus:ring">
+              <svg fill="currentColor" viewBox="0 0 512 512" className="w-4 h-4 ">
+                <path d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"></path>
+              </svg>
+            </button>
+          </span>
+          <input type="search" name="Search" placeholder="Search..." className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none " />
+        </div>
+      </fieldset>
+    </>
+  )
+
   return (
     <>
       <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -32,30 +83,10 @@ import Alert from '../Alert'
                 <rect x="14" y="11" width="7" height="12" />
               </svg>
               <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-                Company
+                Inicio
               </span>
             </a>
             <ul className="flex items-center hidden space-x-8 lg:flex">
-              <li>
-                <a
-                  href="/"
-                  aria-label="Our product"
-                  title="Our product"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                >
-                  Product
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/"
-                  aria-label="Our product"
-                  title="Our product"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                >
-                  Features
-                </a>
-              </li>
               <li>
                 <a
                   href="/"
@@ -63,43 +94,49 @@ import Alert from '../Alert'
                   title="Product pricing"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                 >
-                  Pricing
+                  Inicio
                 </a>
               </li>
               <li>
                 <a
                   href="/"
-                  aria-label="About us"
-                  title="About us"
+                  aria-label="Our product"
+                  title="Our product"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                 >
-                  About us
+                  Catálogo
                 </a>
               </li>
+              <li>
+                <a
+                  href="/"
+                  aria-label="Our product"
+                  title="Our product"
+                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+                >
+                  Quienes somos?
+                </a>
+              </li>
+              <li>
+              {searchinput}
+              </li>
+              <li>
+             
+              </li>
+
+
+
             </ul>
           </div>
-          <ul className="flex items-center hidden space-x-8 lg:flex">
-            <li>
-              <Link
-                to="/login"
-                aria-label="Sign in"
-                title="Sign in"
-                className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-              >
-                Ingresar
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/signup"
-                className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Registrate
-              </Link>
-            </li>
-          </ul>
+
+          <div className='flex space-x-6'>
+          <Navcar/>
+          {
+            isAuthenticated ? <Dropauth /> : welcomeLinks
+          }
+          </div>
+         
+         
           <div className="lg:hidden z-10 ">
             <button
               aria-label="Open Menu"
@@ -244,4 +281,11 @@ import Alert from '../Alert'
   );
 };
 
-export default Navbar
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.Auth.isAuthenticated,
+})
+
+export default connect(mapStateToProps, {
+
+})(Navbar)
