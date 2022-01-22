@@ -9,6 +9,10 @@ import Loader from 'react-loader-spinner'
 import { Navigate } from 'react-router'
 
 
+
+import logoRight from '../../img/banner/Ninja.jpg'
+import logoLeft from '../../img/banner/RosaMoney.jpg'
+
 const Login = ({
     login, loading
 }) => {
@@ -20,7 +24,7 @@ const Login = ({
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-      })
+    })
 
     const {
         email,
@@ -35,8 +39,8 @@ const Login = ({
         e.preventDefault();
         login(email, password);
         setActivated(true);
-        window.scrollTo(0,0)
-        
+        window.scrollTo(0, 0)
+
 
     }
     if (activated)
@@ -47,17 +51,14 @@ const Login = ({
             <div className="container mx-auto">
                 <div className="flex justify-center px-6 my-12">
                     <div className="w-full xl:w-3/4 lg:w-11/12 flex">
-                        <div
-                            className="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg"
-                        >
-                            <img
 
-                                src="https://source.unsplash.com/K4mSJ7kc0As/600x600"
-                                alt="Workflow"
-                            />
-                        </div>
+                        <img
+                            className="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/4 bg-cover rounded-l-lg"
+                            src={logoLeft}
+                            alt="Workflow"
+                        />
                         <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
-                            <h3 className="pt-4 text-2xl text-center">Biembenido!</h3>
+                            <h3 className="pt-4 text-2xl text-center font-semibold">Bienvenido!</h3>
                             <form onSubmit={e => onSubmit(e)} className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
                                 <div className="mb-4">
                                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
@@ -87,11 +88,11 @@ const Login = ({
                                         placeholder="******************"
                                     />
                                 </div>
-                             
+
                                 <div className="mb-6 text-center">
                                     {loading ?
                                         <button
-                                            className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                                            className="w-full px-4 py-2 font-bold text-white bg-twc-50 rounded-full hover:bg-twc-100 focus:outline-none focus:shadow-outline"
                                         >
                                             <Loader
                                                 type="Oval"
@@ -101,7 +102,7 @@ const Login = ({
                                             />
                                         </button> :
                                         <button
-                                            className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                                            className="w-full px-4 py-2 font-bold text-white bg-twc-50 rounded-full hover:bg-twc-100 focus:outline-none focus:shadow-outline"
                                             type="submit"
                                         >
                                             Ingresar
@@ -128,6 +129,13 @@ const Login = ({
                                 </div>
                             </form>
                         </div>
+
+                        <img
+                            className="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/4 bg-cover rounded-l-lg"
+
+                            src={logoRight}
+                            alt="Workflow"
+                        />
                     </div>
                 </div>
             </div>

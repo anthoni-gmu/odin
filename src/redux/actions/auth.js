@@ -87,22 +87,30 @@ export const signup=(first_name,last_name,email,password,re_password) => async d
                 type:SIGNUP_OK,
                 payload: res.data
             });
+            dispatch(setAlert("Te enviamos un correo, por favor activa tu cuenta. Revisa el correo de spam","green"))
         }else{
             dispatch({
                 type:SIGNUP_FAIL
             });
+            dispatch(setAlert('Error al crear cuenta', 'red'));
+
+
         }
         dispatch({
             type: REMOVE_AUTH_LOADING
         });
         
     } catch (err) {
+        console.log("error")
+        console.log(err)
         dispatch({
             type: SIGNUP_FAIL
         });
         dispatch({
             type: REMOVE_AUTH_LOADING
         });
+        dispatch(setAlert('Error conectando con el servidor, intenta mas tarde.', 'red'));
+
     }
 
 

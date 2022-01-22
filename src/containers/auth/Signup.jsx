@@ -36,13 +36,14 @@ const Signup = ({
 
     const onSubmit = e => {
         e.preventDefault();
+        
         signup(first_name, last_name,email,password,re_password);
         setAccountCreated(true);
         window.scrollTo(0,0)
     }
 
     if (accountCreated)
-        return <Navigate to='/login' />;
+        return <Navigate to='/' />;
 
 
 
@@ -61,7 +62,7 @@ const Signup = ({
                             />
                         </div>
                         <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
-                            <h3 className="pt-4 text-2xl text-center">Biembenido!</h3>
+                            <h3 className="pt-4 text-2xl text-center">bienvenido!</h3>
                             <form onSubmit={e=>onSubmit(e)} className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
                                 <div className="mb-4">
                                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="first_name">
@@ -120,7 +121,7 @@ const Signup = ({
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="re_password">
+                                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="password">
                                         Repite tu contraseña
                                     </label>
                                     <input
@@ -137,8 +138,8 @@ const Signup = ({
                                 <div className="mb-6 text-center">
                                        
                                         <button
-                                            className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                                             type="submit"
+                                            className="w-full px-4 py-2 font-bold text-white bg-twc-50 rounded-full hover:bg-twc-100 focus:outline-none focus:shadow-outline"
                                         >
                                             Registrarce
                                         </button>

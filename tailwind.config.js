@@ -19,6 +19,12 @@ module.exports = {
           'accent-400': '#ff1744',
           'accent-700': '#d50000',
         },
+        twc:{
+          50: '#d49a01',
+          100: '#febb0c',
+          200: '#aa7b01',
+         
+        },
         purple: {
           50: '#f3e5f5',
           100: '#e1bee7',
