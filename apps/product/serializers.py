@@ -13,7 +13,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'price',
-            'is_featured',
             'quantity',
             'photo',
+            'num_visits',
+            'last_visit'
         ]
+        

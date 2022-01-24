@@ -10,12 +10,17 @@ class Product(models.Model):
     sizes=models.ManyToManyField(Size,blank=True)
 
     parent=models.ForeignKey('self', related_name='variants', on_delete=models.CASCADE,blank=True,null=True)
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True,null=True)
+    
     price=models.FloatField()
     is_featured=models.BooleanField(default=False)
     quantity=models.IntegerField(default=1)
     date_added=models.DateTimeField( default=datetime.now)
+
+    num_visits = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(blank=True, null=True)
 
     photo = models.ImageField(upload_to='photos/%Y/%m/')
 

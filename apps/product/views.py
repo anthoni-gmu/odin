@@ -7,12 +7,16 @@ from apps.product.serializers import ProductSerializer
 from apps.category.models import Category
 from django.db.models import Q
 
+
+from .utilities import randomProducts as random
+from datetime import datetime
+
 class ProductDetailView(APIView):
     permission_classes = (permissions.AllowAny, )
-     
+    
     def get(self, request, productId, format=None):
         try:
-            product_id=int(productId)
+            product_id = int(productId)
         except:
             return Response(
                 {'error': 'Product ID must be an integer'},
@@ -21,52 +25,57 @@ class ProductDetailView(APIView):
         if Product.objects.filter(id=product_id).exists():
             product = Product.objects.get(id=product_id)
 
-            
-            product = ProductSerializer(product)
+            related_products = product.category.products.filter(
+                parent=None).exclude(id=product.id)
 
-            return Response({'product': product.data}, status=status.HTTP_200_OK)
+            if product.variants.all():
+                products_colors = list(
+                    product.variants.all().exclude(id=product.id))
+            elif product.parent:
+                products_colors = list(
+                    product.parent.variants.all().exclude(id=product.id))
+                related_products = list(product.category.products.filter(
+                    parent=None).exclude(id=product.parent.id))
+
+                products_colors.append(product.parent)
+            else:
+                products_colors = []
+
+            #visits
+            product.num_visits = product.num_visits + 1
+            product.last_visit = datetime.now()
+            product.save()
+
+            # Serializers
+            product = ProductSerializer(product)
+            related_products = ProductSerializer(related_products, many=True)
+            products_colors = ProductSerializer(products_colors, many=True)
+
+           
+
+            return Response({
+                'product': product.data,
+                'related_products': related_products.data,
+                'products_colors': products_colors.data
+            }, status=status.HTTP_200_OK)
+
         else:
             return Response(
                 {'error': 'Product with this ID does not exist'},
                 status=status.HTTP_404_NOT_FOUND)
 
-class ListProductsView(APIView):
+
+class ListProductsHomeView(APIView):
     permission_classes = (permissions.AllowAny, )
-    def get(self,request,format=None):
-        sortBy = request.query_params.get('sortBy')
 
-        if not (sortBy == 'date_added' or sortBy == 'price' or sortBy == 'sold' or sortBy == 'name'):
-            sortBy = 'date_added'
-        
-        order = request.query_params.get('order')
-        limit = request.query_params.get('limit')
+    def get(self, request, format=None):
+        products_featured = list(Product.objects.filter(is_featured=True))
 
-        if not limit:
-            limit = 6
-        
-        try:
-            limit = int(limit)
-        except:
-            return Response(
-                {'error': 'Limit must be an integer'},
-                status=status.HTTP_404_NOT_FOUND)
-        
-        if limit <= 0:
-            limit = 6
-        
-        if order == 'desc':
-            sortBy = '-' + sortBy
-            products = Product.objects.order_by(sortBy).all()[:int(limit)]
-        elif order == 'asc':
-            products = Product.objects.order_by(sortBy).all()[:int(limit)]
-        else:
-            products = Product.objects.order_by(sortBy).all()
+        if products_featured:
+            products_featured = random(products_featured, 4)
+            products_featured = ProductSerializer(products_featured, many=True)
 
-        
-        products = ProductSerializer(products, many=True)
-
-        if products:
-            return Response({'products': products.data}, status=status.HTTP_200_OK)
+            return Response({'products': products_featured.data}, status=status.HTTP_200_OK)
         else:
             return Response(
                 {'error': 'No products to list'},
