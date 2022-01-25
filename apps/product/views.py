@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 from .utilities import randomProducts as random
-from datetime import datetime
+from django.utils import timezone
 
 class ProductDetailView(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -43,7 +43,7 @@ class ProductDetailView(APIView):
 
             #visits
             product.num_visits = product.num_visits + 1
-            product.last_visit = datetime.now()
+            product.last_visit = timezone.now()
             product.save()
 
             # Serializers

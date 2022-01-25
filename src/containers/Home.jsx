@@ -1,7 +1,20 @@
 import Layaut from '../layout/Layout'
 import homeVideo from "../img/video/271615819_645188563579221_9010116722901761548_n.mp4"
 import ReactPlayer from 'react-player'
-export const Home = () => {
+import { useEffect } from "react";
+import {get_products_frontpage} from "../redux/actions/product"
+import { connect } from "react-redux"
+
+import Feature from '../components/homepage/Featured';
+const Home = ({
+    get_products_frontpage,
+    producstFrontpage
+}) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        get_products_frontpage();
+    }, []);
+    
     return (
         <Layaut>
             <div className="relative px-4 pt-16 mx-auto lg:py-32 md:px-8 xl:px-20 sm:max-w-xl md:max-w-full">
@@ -50,8 +63,21 @@ export const Home = () => {
                 </div>
 
             </div>
+
+            <div>
+            
+            <Feature data={producstFrontpage} />
+            </div>
         </Layaut>
     );
 };
 
-export default Home
+const mapStateToProps = state =>({
+    producstFrontpage : state.Product.producstFrontpage
+
+})
+
+export default connect (mapStateToProps,{
+    get_products_frontpage
+}) (Home)
+
