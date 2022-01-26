@@ -1,6 +1,8 @@
 from django.urls import path
 
-app_name="category"
-urlpatterns = [
+from .views import ListCategoriesView,ListColorView
 
+urlpatterns = [
+    path('categories', ListCategoriesView.as_view()),
+    path('colors', ListColorView.as_view()),
 ]

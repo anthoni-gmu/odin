@@ -98,14 +98,14 @@ const Navbar = ({
                 </a>
               </li>
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/shop"
                   aria-label="Our product"
                   title="Our product"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                 >
                   Catálogo
-                </a>
+                </Link>
               </li>
               <li>
                 <a
