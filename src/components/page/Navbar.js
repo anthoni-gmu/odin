@@ -4,13 +4,52 @@ import Navcar from '../../components/cart/Navcar'
 import { connect } from 'react-redux'
 import { NavLink, Link, Navigate } from 'react-router-dom'
 import { Fragment, useEffect, useState } from 'react'
-
-
+import SearchBox from './SearchBox'
+import {
+  get_categories,
+} from '../../redux/actions/categories'
+import {
+  get_search_products
+} from '../../redux/actions/product'
+import { SearchIcon } from '@heroicons/react/solid'
 const Navbar = ({
   isAuthenticated,
   user,
+  categories,
+  get_search_products,
+  get_categories
+
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [render,setRender]=useState(false);
+  const [formData,setFormData]= useState({
+    category_id:0,
+    search: ''
+  });
+
+  const {category_id,search}= formData;
+
+  useEffect(() => {
+    get_categories();
+  }, [])
+
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = e => {
+    e.preventDefault();
+    get_search_products(search, category_id);
+    setRender(!render);
+  }
+
+
+  if(render){
+
+    return <Navigate to='/search' />
+  }
+
+
 
 
   const welcomeLinks = (
@@ -40,19 +79,54 @@ const Navbar = ({
 
   const searchinput = (
     <>
-      <fieldset className="w-full space-y-1   border rounded-md">
-        <label htmlFor="Search" className="hidden">Search</label>
-        <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-            <button type="button" title="search" className="p-1 focus:outline-none focus:ring">
-              <svg fill="currentColor" viewBox="0 0 512 512" className="w-4 h-4 ">
-                <path d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"></path>
-              </svg>
-            </button>
-          </span>
-          <input type="search" name="Search" placeholder="Search..." className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none " />
-        </div>
-      </fieldset>
+      <form onSubmit={e => onSubmit(e)} className="text-base font-medium text-gray-500 hover:text-gray-900">
+            <div>
+                <div className="mt-1 flex rounded-md shadow-sm border border-gray-200">
+
+                    <div className="mt-1 mx-1 px-2 py-1">
+                        <select
+                            onChange={e => onChange(e)}
+                            name='category_id'
+                            className='rounded-full'
+                        >
+                            <option value={0}>All</option>
+                            {
+                                categories &&
+                                categories !== null &&
+                                categories !== undefined &&
+                                categories.map((category, index) => (
+                                    <option key={index} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))
+                            }
+
+                        </select>
+                    </div>
+
+                    <div className="relative flex items-stretch flex-grow focus-within:z-10">
+                        <input
+                            type="search"
+                            name="search"
+                            onChange={e => onChange(e)}
+                            value={search}
+                            required
+                            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-2 sm:text-sm border-gray-300"
+                            placeholder="Que buscas hoy?"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                        <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+
+                    </button>
+
+                </div>
+            </div>
+        </form>
     </>
   )
 
@@ -118,10 +192,10 @@ const Navbar = ({
                 </a>
               </li>
               <li>
-              {searchinput}
+                {searchinput}
               </li>
               <li>
-             
+
               </li>
 
 
@@ -130,13 +204,13 @@ const Navbar = ({
           </div>
 
           <div className='flex space-x-6'>
-          <Navcar/>
-          {
-            isAuthenticated ? <Dropauth /> : welcomeLinks
-          }
+            <Navcar />
+            {
+              isAuthenticated ? <Dropauth /> : welcomeLinks
+            }
           </div>
-         
-         
+
+
           <div className="lg:hidden z-10 ">
             <button
               aria-label="Open Menu"
@@ -284,8 +358,11 @@ const Navbar = ({
 
 const mapStateToProps = state => ({
   isAuthenticated: state.Auth.isAuthenticated,
+  categories: state.Categories.categories,
 })
 
 export default connect(mapStateToProps, {
+  get_categories,
+  get_search_products
 
 })(Navbar)

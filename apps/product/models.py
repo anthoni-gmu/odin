@@ -21,7 +21,7 @@ class Product(models.Model):
 
     num_visits = models.IntegerField(default=0)
     last_visit = models.DateTimeField(blank=True, null=True)
-
+    solt = models.IntegerField(default=0)
     photo = models.ImageField(upload_to='photos/%Y/%m/')
 
 

@@ -525,18 +525,18 @@ const Shop = ({
                           </Disclosure.Button>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                            <div className=' flex items-center h-5 my-5'>
-                                  <input
-                                    name='color_id'
-                                    onChange={e => onChange(e)}
-                                    value={0}
-                                    type='radio'
-                                    className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
-                                  />
-                                  <label className="ml-3 min-w-0 flex-1 text-gray-500">
-                                    Todos
-                                  </label>
-                                </div>
+                              <div className=' flex items-center h-5 my-5'>
+                                <input
+                                  name='color_id'
+                                  onChange={e => onChange(e)}
+                                  value={0}
+                                  type='radio'
+                                  className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
+                                />
+                                <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                  Todos
+                                </label>
+                              </div>
                               {
 
                                 colors &&

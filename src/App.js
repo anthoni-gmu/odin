@@ -14,6 +14,7 @@ import ResetPasswordConfirm from './containers/auth/ResetPasswordConfirm';
 
 import Product from "./containers/product/Product";
 import Shop from "./containers/Shop";
+import Search from "./containers/product/Search";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
 
           <Route exact path='/product/:productId' element={<Product />}/>
           <Route exact path='/shop' element={<Shop />}/>
+          <Route exact path='/search' element={<Search/>}/>
 
         </Routes>
       </Router>

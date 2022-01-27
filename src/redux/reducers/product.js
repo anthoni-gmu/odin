@@ -19,7 +19,6 @@ import {
 
 
 const initialState = {
-    producstFrontpage: null,
     product: null,
     related_products: null,
     products_colors: null,
@@ -27,7 +26,8 @@ const initialState = {
     products_arrival: null,
     products_sold: null,
     search_products: null,
-    filtered_products: null
+    filtered_products: null,
+    categories:null
 }
 
 export default function Product(state = initialState, action) {
@@ -66,12 +66,12 @@ export default function Product(state = initialState, action) {
         case GET_PRODUCTS_HOME_OK:
             return {
                 ...state,
-                producstFrontpage: payload.products
+                categories: payload.categories
             }
         case GET_PRODUCTS_HOME_FAIL:
             return {
                 ...state,
-                producstFrontpage: null
+                categories: null
             }
 
 

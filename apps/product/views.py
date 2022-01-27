@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from apps.product.models import Product
 from apps.product.serializers import ProductSerializer
-from apps.category.models import Category,Color
+from apps.category.models import Category, Color
 from django.db.models import Q
 
 
@@ -78,12 +78,31 @@ class ListProductsHomeView(APIView):
 
     def get(self, request, format=None):
         products_featured = list(Product.objects.filter(is_featured=True))
+        products_news = list(Product.objects.order_by('-date_added'))
+        products_views = list(Product.objects.order_by('-num_visits'))
+        products_sold = list(Product.objects.order_by('-solt'))
 
         if products_featured:
             products_featured = random(products_featured, 4)
             products_featured = ProductSerializer(products_featured, many=True)
 
-            return Response({'products': products_featured.data}, status=status.HTTP_200_OK)
+            products_news = random(products_news, 4)
+            products_news = ProductSerializer(products_news, many=True)
+
+            products_views = random(products_views, 4)
+            products_views = ProductSerializer(products_views, many=True)
+
+            products_sold = random(products_sold, 4)
+            products_sold = ProductSerializer(products_sold, many=True)
+
+            return Response(
+                {'categories': {
+                    'Relevantes': products_featured.data,
+                    'Nuevos': products_news.data,
+                    'Más vistos': products_views.data,
+                    'Más vendidos': products_sold.data
+                }
+                }, status=status.HTTP_200_OK)
         else:
             return Response(
                 {'error': 'No products to list'},
@@ -236,8 +255,7 @@ class ListBySearchView(APIView):
                 {'error': 'Category ID must be an integer'},
                 status=status.HTTP_404_NOT_FOUND)
         color_id = int(data['color_id'])
-        print(color_id)
-
+        print("cat", category_id)
         price_range = data['price_range']
         sort_by = data['sort_by']
 
