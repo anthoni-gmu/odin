@@ -6,11 +6,12 @@ import { get_products_frontpage } from "../redux/actions/product"
 import { connect } from "react-redux"
 import Feature from '../components/homepage/Featured';
 import { Link } from 'react-router-dom';
-import Test from '../components/product/Test'
-import { useState } from 'react'
-import { StarIcon } from '@heroicons/react/solid'
+import Related from '../components/homepage/Related'
+import Categories from '../components/homepage/Categories'
 
-
+import {
+    get_categories,
+  } from '../redux/actions/categories'
 
 import cpolos from "../img/banner/polos.jpg"
 import cgorras from "../img/banner/gorras.jpg"
@@ -23,12 +24,11 @@ import herobanner from "../img/banner/hero2.jpeg"
 
 
 
-import { RadioGroup } from '@headlessui/react'
 
 
 const Home = ({
     get_products_frontpage,
-    categories
+    related,categories
 }) => {
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -83,42 +83,7 @@ const Home = ({
                         <p className="lg:w-1/2 w-full leading-relaxed text-gray-500">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag.</p>
                     </div>
                     <div className=" flex flex-wrap -m-4">
-                        <div className="w-1/2 p-4 lg:w-1/4">
-                            <div className=" bg-center rounded-lg bg-cover h-96 bg-ima" style={{ backgroundImage: `url(${cpolos})` }}  >
-                                <div className="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-5 hover:bg-opacity-50 hover:rounded-lg">
-                                    <div className="text-center">
-                                        <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-deep-purple-accent-400 rounded-md lg:w-auto hover:bg-deep-purple-accent-100 focus:outline-none focus:bg-amber-500">Stikers</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-1/2 p-4 lg:w-1/4">
-                            <div className=" bg-center rounded-lg bg-cover h-96 bg-ima" style={{ backgroundImage: `url(${cpolos})` }}  >
-                                <div className="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-5 hover:bg-opacity-50 hover:rounded-lg">
-                                    <div className="text-center">
-                                        <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-deep-purple-accent-400 rounded-md lg:w-auto hover:bg-deep-purple-accent-100 focus:outline-none focus:bg-amber-500">Stikers</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-1/2 p-4 lg:w-1/4">
-                            <div className=" bg-center rounded-lg bg-cover h-96 bg-ima" style={{ backgroundImage: `url(${cpolos})` }}  >
-                                <div className="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-5 hover:bg-opacity-50 hover:rounded-lg">
-                                    <div className="text-center">
-                                        <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-deep-purple-accent-400 rounded-md lg:w-auto hover:bg-deep-purple-accent-100 focus:outline-none focus:bg-amber-500">Stikers</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-1/2 p-4 lg:w-1/4">
-                            <div className=" bg-center rounded-lg bg-cover h-96 bg-ima" style={{ backgroundImage: `url(${cpolos})` }}  >
-                                <div className="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-5 hover:bg-opacity-50 hover:rounded-lg">
-                                    <div className="text-center">
-                                        <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-deep-purple-accent-400 rounded-md lg:w-auto hover:bg-deep-purple-accent-100 focus:outline-none focus:bg-amber-500">Stikers</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    {categories && categories !== null && categories !== undefined && <Categories data={categories} />}
 
                     </div>
                 </div>
@@ -132,9 +97,7 @@ const Home = ({
             <div className='bg-cyan-50'>
                 <div className="max-w-2xl mx-auto  px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 ">
 
-
-                    {/* <Feature data={producstFrontpage} /> */}¨
-                    {categories && categories !== null && categories !== undefined && <Test categories={categories} />}
+                    {related && related !== null && related !== undefined && <Related categories={related} />}
 
                 </div>
             </div>
@@ -153,11 +116,14 @@ const Home = ({
 };
 
 const mapStateToProps = state => ({
-    categories: state.Product.categories
+    related: state.Product.categories,
+    categories: state.Categories.categories,
 
 })
 
 export default connect(mapStateToProps, {
-    get_products_frontpage
+    get_products_frontpage,
+    get_categories
+
 })(Home)
 

@@ -21,7 +21,7 @@ class ListCategoriesView(APIView):
                     item = {}
                     item['id'] = category.id
                     item['name'] = category.name
-                    item['photo'] = category.photo
+                    item['photo'] = category.photo.url
 
                     item['sub_categories'] = []
                     for cat in categories:
@@ -29,7 +29,7 @@ class ListCategoriesView(APIView):
                         if cat.parent and cat.parent.id == category.id:
                             sub_item['id'] = cat.id
                             sub_item['name'] = cat.name
-                            sub_item['photo'] = cat.photo
+                            sub_item['photo'] = cat.photo.url
                             sub_item['sub_categories'] = []
 
                             item['sub_categories'].append(sub_item)
@@ -37,6 +37,8 @@ class ListCategoriesView(APIView):
             return Response({'categories': result}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'No categories found'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 
 class ListColorView(APIView):
