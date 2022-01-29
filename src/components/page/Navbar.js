@@ -12,23 +12,47 @@ import {
   get_search_products
 } from '../../redux/actions/product'
 import { SearchIcon } from '@heroicons/react/solid'
+
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+const usertest = {
+  name: 'Tom Cook',
+  email: 'tom@example.com',
+  imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+}
+const navigation = [
+  { name: 'Dashboard', to: '#', current: true },
+  { name: 'Inicio', to: '/', current: true },
+  { name: 'Catalogo', to: '/shop', current: false },
+  { name: 'Quienes somos?', to: '#', current: false },
+]
+const userNavigation = [
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+]
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
 const Navbar = ({
   isAuthenticated,
-  user,
   categories,
   get_search_products,
-  get_categories
+  get_categories,
+  user
 
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [render,setRender]=useState(false);
-  const [formData,setFormData]= useState({
-    category_id:0,
+  const [render, setRender] = useState(false);
+  const [formData, setFormData] = useState({
+    category_id: 0,
     search: ''
   });
 
-  const {category_id,search}= formData;
+
+  const { category_id, search } = formData;
 
   useEffect(() => {
     get_categories();
@@ -44,7 +68,7 @@ const Navbar = ({
   }
 
 
-  if(render){
+  if (render) {
 
     return <Navigate to='/search' />
   }
@@ -53,13 +77,13 @@ const Navbar = ({
 
 
   const welcomeLinks = (
-    <ul className="flex items-center hidden space-x-8 lg:flex">
+    <ul className=" items-center hidden space-x-8 md:flex">
       <li>
         <Link
           to="/login"
           aria-label="Sign in"
           title="Sign in"
-          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-yellow-accent-700"
         >
           Ingresar
         </Link>
@@ -67,7 +91,7 @@ const Navbar = ({
       <li>
         <Link
           to="/signup"
-          className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+          className="inline-flex items-center justify-center h-12 px-6 font-semibold tracking-wide text-gray-700  transition duration-200 rounded shadow-md bg-yellow-accent-400 hover:bg-yellow-accent-700 focus:shadow-outline focus:outline-none"
           aria-label="Sign up"
           title="Sign up"
         >
@@ -80,276 +104,165 @@ const Navbar = ({
   const searchinput = (
     <>
       <form onSubmit={e => onSubmit(e)} className="text-base font-medium text-gray-500 hover:text-gray-900">
-            <div>
-                <div className="mt-1 flex rounded-md shadow-sm border border-gray-200">
+        <div>
+          <div className="mt-1 flex rounded-md shadow-sm border border-gray-200">
 
-                    <div className="mt-1 mx-1 px-2 py-1">
-                        <select
-                            onChange={e => onChange(e)}
-                            name='category_id'
-                            className='rounded-full'
-                        >
-                            <option value={0}>All</option>
-                            {
-                                categories &&
-                                categories !== null &&
-                                categories !== undefined &&
-                                categories.map((category, index) => (
-                                    <option key={index} value={category.id}>
-                                        {category.name}
-                                    </option>
-                                ))
-                            }
+            <div className="mt-1 mx-1 px-2 py-1">
+              <select
+                onChange={e => onChange(e)}
+                name='category_id'
+                className='rounded-full'
+              >
+                <option value={0}>All</option>
+                {
+                  categories &&
+                  categories !== null &&
+                  categories !== undefined &&
+                  categories.map((category, index) => (
+                    <option key={index} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))
+                }
 
-                        </select>
-                    </div>
-
-                    <div className="relative flex items-stretch flex-grow focus-within:z-10">
-                        <input
-                            type="search"
-                            name="search"
-                            onChange={e => onChange(e)}
-                            value={search}
-                            required
-                            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-2 sm:text-sm border-gray-300"
-                            placeholder="Que buscas hoy?"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                    >
-                        <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-
-                    </button>
-
-                </div>
+              </select>
             </div>
-        </form>
+
+            <div className="relative flex items-stretch flex-grow focus-within:z-10">
+              <input
+                type="search"
+                name="search"
+                onChange={e => onChange(e)}
+                value={search}
+                required
+                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-2 sm:text-sm border-gray-300"
+                placeholder="Que buscas hoy?"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+
+            </button>
+
+          </div>
+        </div>
+      </form>
     </>
   )
 
   return (
     <>
-      <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
-        <div className="relative flex items-center justify-between">
-          <div className="flex items-center">
-            <a
-              href="/"
-              aria-label="Company"
-              title="Company"
-              className="inline-flex items-center mr-8"
-            >
-              <svg
-                className="w-8 text-deep-purple-accent-400"
-                viewBox="0 0 24 24"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                stroke="currentColor"
-                fill="none"
-              >
-                <rect x="3" y="1" width="7" height="12" />
-                <rect x="3" y="17" width="7" height="6" />
-                <rect x="14" y="1" width="7" height="6" />
-                <rect x="14" y="11" width="7" height="12" />
-              </svg>
-              <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-                Inicio
-              </span>
-            </a>
-            <ul className="flex items-center hidden space-x-8 lg:flex">
-              <li>
-                <a
-                  href="/"
-                  aria-label="Product pricing"
-                  title="Product pricing"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                >
-                  Inicio
-                </a>
-              </li>
-              <li>
-                <Link
-                  to="/shop"
-                  aria-label="Our product"
-                  title="Our product"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                >
-                  Catálogo
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="/"
-                  aria-label="Our product"
-                  title="Our product"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                >
-                  Quienes somos?
-                </a>
-              </li>
-              <li>
-                {searchinput}
-              </li>
-              <li>
+      <Disclosure as="nav" className="bg-teal-50 ">
+        {({ open }) => (
+          <>
 
-              </li>
-
-
-
-            </ul>
-          </div>
-
-          <div className='flex space-x-6'>
-            <Navcar />
-            {
-              isAuthenticated ? <Dropauth /> : welcomeLinks
-            }
-          </div>
-
-
-          <div className="lg:hidden z-10 ">
-            <button
-              aria-label="Open Menu"
-              title="Open Menu"
-              className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
-              onClick={() => setIsMenuOpen(true)}
-            >
-              <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M23,13H1c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,13,23,13z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M23,6H1C0.4,6,0,5.6,0,5s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,6,23,6z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M23,20H1c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,20,23,20z"
-                />
-              </svg>
-            </button>
-            {isMenuOpen && (
-              <div className="absolute top-0 left-0 w-full">
-                <div className="p-5 bg-white border rounded shadow-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <a
-                        href="/"
-                        aria-label="Company"
-                        title="Company"
-                        className="inline-flex items-center"
-                      >
-                        <svg
-                          className="w-8 text-deep-purple-accent-400"
-                          viewBox="0 0 24 24"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeMiterlimit="10"
-                          stroke="currentColor"
-                          fill="none"
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-16">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <img
+                      className="h-8 w-8"
+                      src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                      alt="Workflow"
+                    />
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="ml-10 flex items-baseline space-x-4">
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          to={item.to}
+                          className={classNames(
+                            item.current
+                              ? 'bg-slate-700 text-white'
+                              : 'text-slate-800 hover:bg-slate-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium'
+                          )}
+                          aria-current={item.current ? 'page' : undefined}
                         >
-                          <rect x="3" y="1" width="7" height="12" />
-                          <rect x="3" y="17" width="7" height="6" />
-                          <rect x="14" y="1" width="7" height="6" />
-                          <rect x="14" y="11" width="7" height="12" />
-                        </svg>
-                        <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-                          Company
-                        </span>
-                      </a>
-                    </div>
-                    <div>
-                      <button
-                        aria-label="Close Menu"
-                        title="Close Menu"
-                        className="p-2 -mt-2 -mr-2 transition duration-200 rounded hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
-                          <path
-                            fill="currentColor"
-                            d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z"
-                          />
-                        </svg>
-                      </button>
+                          {item.name}
+                        </Link>
+                      ))}
+
                     </div>
                   </div>
-                  <nav>
-                    <ul className="space-y-4">
-                      <li>
-                        <a
-                          href="/"
-                          aria-label="Our product"
-                          title="Our product"
-                          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                        >
-                          Product
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/"
-                          aria-label="Our product"
-                          title="Our product"
-                          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                        >
-                          Features
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/"
-                          aria-label="Product pricing"
-                          title="Product pricing"
-                          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                        >
-                          Pricing
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/"
-                          aria-label="About us"
-                          title="About us"
-                          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                        >
-                          About us
-                        </a>
-                      </li>
-                      <li>
-                        <Link
-                          to="/login"
-                          aria-label="Sign in"
-                          title="Sign in"
-                          className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                        >
-                          Ingresar
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/signup"
-                          className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                          aria-label="Sign up"
-                          title="Sign up"
-                        >
-                          Registrate
-                        </Link>
-                      </li>
-                    </ul>
-                  </nav>
+                </div>
+
+                {
+                  isAuthenticated ? <Dropauth /> : welcomeLinks
+                }
+
+                <div className="-mr-2 flex md:hidden">
+                  {/* Mobile menu button */}
+                  <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <span className="sr-only">Open main menu</span>
+                    {open ? (
+                      <XIcon className="block h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                    )}
+                  </Disclosure.Button>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-      </div>
+            </div>
+
+            <Disclosure.Panel className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                {navigation.map((item) => (
+                  <Disclosure.Button
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    className={classNames(
+                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'block px-3 py-2 rounded-md text-base font-medium'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                ))}
+              </div>
+              <div className="pt-4 pb-3 border-t border-gray-700">
+                <div className="flex items-center px-5">
+                  <div className="flex-shrink-0">
+                    <img className="h-10 w-10 rounded-full" src={usertest.imageUrl} alt="" />
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-base font-medium leading-none text-white">{usertest.name}</div>
+                    <div className="text-sm font-medium leading-none text-gray-400">{usertest.email}</div>
+                  </div>
+                  <button
+                    type="button"
+                    className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  >
+                    <span className="sr-only">View notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="mt-3 px-2 space-y-1">
+                  {userNavigation.map((item) => (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  ))}
+                </div>
+              </div>
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+
+
       <Alert />
     </>
   );

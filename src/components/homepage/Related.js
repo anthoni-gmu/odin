@@ -9,17 +9,13 @@ function classNames(...classes) {
 
 
 export default function Homepage({
-  categories
+  related
 }) {
 
 
   return (
 
     <div className="">
-
-
-
-
 
       <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
         <div>
@@ -48,7 +44,7 @@ export default function Homepage({
 
       <Tab.Group>
         <Tab.List className="flex ">
-          {Object.keys(categories).map((category) => (
+          {Object.keys(related).map((category) => (
             <Tab
               key={category}
               className={({ selected }) =>
@@ -66,7 +62,7 @@ export default function Homepage({
           ))}
         </Tab.List>
         <Tab.Panels className="mt-2">
-          {Object.values(categories).map((posts, idx) => (
+          {Object.values(related).map((posts, idx) => (
             <Tab.Panel
               key={idx}
               className={classNames(

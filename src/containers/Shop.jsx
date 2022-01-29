@@ -11,6 +11,7 @@ import { get_products, get_filtered_products } from '../redux/actions/product'
 import ProductCard from '../components/product/ProductCart'
 import { prices } from '../helpers/fixedPrices'
 
+import bg from '../img/banner/hero.jpg'
 
 const Shop = ({
   get_categories,
@@ -106,11 +107,11 @@ const Shop = ({
 
   return (
     <Layout>
-      <div className="bg-white">
+      <div className="bg-white" style={{ backgroundImage: `url("${bg}")` }}>
         <div>
           {/* Mobile filter dialog */}
           <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-            <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setMobileFiltersOpen}>
+            <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden"  onClose={setMobileFiltersOpen}>
               <Transition.Child
                 as={Fragment}
                 enter="transition-opacity ease-linear duration-300"
@@ -413,7 +414,7 @@ const Shop = ({
 
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
-              <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">Shop</h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-white"> 🌹 Catálogo 💀 </h1>
 
               <div className="flex items-center">
                 <button
