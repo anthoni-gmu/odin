@@ -80,7 +80,7 @@ class ListProductsHomeView(APIView):
         products_featured = list(Product.objects.filter(is_featured=True))
         products_news = list(Product.objects.order_by('-date_added'))
         products_views = list(Product.objects.order_by('-num_visits'))
-        products_sold = list(Product.objects.order_by('-solt'))
+        products_sold = list(Product.objects.order_by('-sold'))
 
         if products_featured:
             products_featured = random(products_featured, 4)
@@ -302,20 +302,20 @@ class ListBySearchView(APIView):
             product_results = product_results.filter(color=color)
 
         # Filtrar por precio
-        if price_range == '1 - 19':
+        if price_range == '1 - 50':
             product_results = product_results.filter(price__gte=1)
-            product_results = product_results.filter(price__lt=20)
-        elif price_range == '20 - 39':
-            product_results = product_results.filter(price__gte=20)
-            product_results = product_results.filter(price__lt=40)
-        elif price_range == '40 - 59':
-            product_results = product_results.filter(price__gte=40)
-            product_results = product_results.filter(price__lt=60)
-        elif price_range == '60 - 79':
-            product_results = product_results.filter(price__gte=60)
-            product_results = product_results.filter(price__lt=80)
-        elif price_range == 'More than 80':
-            product_results = product_results.filter(price__gte=80)
+            product_results = product_results.filter(price__lt=51)
+        elif price_range == '51 - 70':
+            product_results = product_results.filter(price__gte=51)
+            product_results = product_results.filter(price__lt=71)
+        elif price_range == '71 - 90':
+            product_results = product_results.filter(price__gte=71)
+            product_results = product_results.filter(price__lt=91)
+        elif price_range == '91 - 119':
+            product_results = product_results.filter(price__gte=91)
+            product_results = product_results.filter(price__lt=120)
+        elif price_range == 'Más de 120':
+            product_results = product_results.filter(price__gte=120)
 
         # Filtrar producto por sort_by
         if order == 'desc':

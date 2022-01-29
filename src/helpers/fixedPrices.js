@@ -1,26 +1,26 @@
 export const prices = [
     {
         id: 0,
-        name: 'Any'
+        name: 'Todos'
     },
     {
         id: 1,
-        name: '1 - 19'
+        name: '1 - 50'
     },
     {
         id: 2,
-        name: '20 - 39'
+        name: '51 - 70'
     },
     {
         id: 3,
-        name: '40 - 59'
+        name: '71 - 90'
     },
     {
         id: 4,
-        name: '60 - 79'
+        name: '91 - 119'
     },
     {
         id: 5,
-        name: 'More than 80'
+        name: 'Más de 120'
     }
 ]
