@@ -157,7 +157,7 @@ export const get_products = () => async dispatch => {
 }
 
 
-export const get_filtered_products = (color_id,category_id, price_range, sort_by, order) => async dispatch => {
+export const get_filtered_products = (search, color_id,category_id, price_range, sort_by, order) => async dispatch => {
     const config = {
         headers: {
             'Accept': 'application/json',
@@ -171,6 +171,7 @@ export const get_filtered_products = (color_id,category_id, price_range, sort_by
         price_range,
         sort_by,
         order,
+        search
     });
 
     try {

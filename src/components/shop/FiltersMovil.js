@@ -1,13 +1,21 @@
-import { Dialog, Disclosure, Transition } from "@headlessui/react"
-import { MinusSmIcon, PlusSmIcon, XIcon } from "@heroicons/react/solid"
+import { Dialog, Transition } from "@headlessui/react"
+import { XIcon, FilterIcon } from "@heroicons/react/solid"
 
 import FilterPrices from "./filters/FilterPrices"
 import FilterCategories from "./filters/FilterCategories"
 import FilterColors from "./filters/FilterColors"
-import MoreFilters from "./filters/MoreFilter"
+import MoreFilters from "./filters/MoreFilters"
 
-import { Link } from "react-router-dom"
+import Search from "./filters/Search"
+import SubmitFilter from "./filters/SubmitFilter"
+
+
+
+
+
+
 const FilterMovil = ({
+    search,
     price_range,
     mobileFiltersOpen,
     sortBy,
@@ -65,6 +73,10 @@ const FilterMovil = ({
                         <form onSubmit={e => onSubmit(e)} className="mt-4 border-t border-gray-200">
 
 
+                            <Search
+                                onChange={onChange}
+                                search={search}
+                            />
                             <FilterCategories
                                 onChange={onChange}
                                 categories={categories}
@@ -77,7 +89,7 @@ const FilterMovil = ({
                             />
 
                             <FilterColors
-                            color_id={color_id}
+                                color_id={color_id}
                                 onChange={onChange}
                                 colors={colors}
                             />
@@ -90,12 +102,7 @@ const FilterMovil = ({
                             />
 
 
-                            <button
-                                type="submit"
-                                className="float-right inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Buscar
-                            </button>
+                            <SubmitFilter/>
 
 
                         </form>

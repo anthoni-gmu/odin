@@ -248,6 +248,17 @@ class ListBySearchView(APIView):
     def post(self, request, format=None):
         data = self.request.data
 
+        search= data['search']
+
+        if len(search) == 0:
+            # mostrar todos los productos si no hay input en la busqueda
+            product_results = Product.objects.order_by('-date_added').all()
+        else:
+            # Si hay criterio de busqueda, filtramos con dicho criterio usando Q
+            product_results = Product.objects.filter(
+                Q(description__icontains=search) | Q(title__icontains=search)
+            )
+
         try:
             category_id = int(data['category_id'])
         except:
@@ -290,6 +301,18 @@ class ListBySearchView(APIView):
                     filtered_categories = tuple(filtered_categories)
                     product_results = Product.objects.filter(
                         category__in=filtered_categories)
+
+
+        if len(search) == 0:
+            # mostrar todos los productos si no hay input en la busqueda
+            product_results = product_results
+        else:
+            # Si hay criterio de busqueda, filtramos con dicho criterio usando Q
+            product_results = product_results.filter(
+                Q(description__icontains=search) | Q(title__icontains=search)
+            )
+
+
 
         if color_id == 0:
             product_results = product_results

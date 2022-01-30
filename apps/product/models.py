@@ -1,8 +1,8 @@
 from django.db import models
-
 from datetime import datetime 
-
 from apps.category.models import Category,Color,Size
+
+
 
 class Product(models.Model):
     category=models.ForeignKey(Category,related_name='products',on_delete=models.CASCADE)

@@ -6,12 +6,15 @@ const MoreFilters = ({
     onChange,
     order
 }) => {
+
+
     return (
-        <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+        
+        <Disclosure as="div" className="border-t-2 border-dashed border-slate-600 px-4 py-6">
             {({ open }) => (
                 <>
                     <h3 className="-mx-2 -my-3 flow-root">
-                        <Disclosure.Button className="px-2 py-3 rounded-lg bg-orange-200 w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
+                        <Disclosure.Button className="px-2 py-3 rounded-lg bg-slate-200 w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
                             <span className="font-sofiapro-regular font-semibold text-black">Mas Filtros</span>
                             <span className="ml-6 flex items-center">
                                 {open ? (

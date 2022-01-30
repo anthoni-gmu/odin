@@ -35,7 +35,8 @@ const Shop = ({
     color_id: '0',
     price_range: 'Any',
     sortBy: 'created',
-    order: 'desc'
+    order: 'desc',
+    search:''
   })
 
   const {
@@ -43,7 +44,8 @@ const Shop = ({
     price_range,
     sortBy,
     order,
-    color_id
+    color_id,
+    search
   } = formData
 
   useEffect(() => {
@@ -58,7 +60,7 @@ const Shop = ({
 
   const onSubmit = e => {
     e.preventDefault()
-    get_filtered_products(color_id, category_id, price_range, sortBy, order)
+    get_filtered_products(search,color_id, category_id, price_range, sortBy, order)
     setFiltered(true)
   }
 
@@ -112,15 +114,15 @@ const Shop = ({
 
   return (
     <Layout>
-      <div className="bg-slate-50" >
+      <div className="bg-slate-50" style={{ backgroundImage: `url("https://storage.googleapis.com/subtlepatterns-production/designers/subtlepatterns/uploads/fabric_1.png")` }} >
         <div>
           {/* Mobile filter dialog */}
 
-          <FilterMovil color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+          <FilterMovil search={search} color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
-              <h1 className="text-4xl font-extrabold tracking-tight text-white"> 🌹 Catálogo 💀 </h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-gray-900"> 🌹 Catálogo 💀 </h1>
 
               <div className="flex items-center">
                 <button
@@ -141,8 +143,8 @@ const Shop = ({
 
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
                 {/* Filters */}
-                
-                <Filter color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+
+                <Filter search={search} color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
                 {/* Product grid */}
                 <div className="lg:col-span-3">
