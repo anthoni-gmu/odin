@@ -12,5 +12,4 @@ urlpatterns = [
     path('get-products', ListProductsView.as_view()),
     path('by/search', ListBySearchView.as_view()),
     path('search', ListSearchView.as_view()),
-
 ]

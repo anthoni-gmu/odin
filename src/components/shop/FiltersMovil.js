@@ -15,7 +15,6 @@ import SubmitFilter from "./filters/SubmitFilter"
 
 
 const FilterMovil = ({
-    onReset,
     search,
     price_range,
     mobileFiltersOpen,
@@ -103,7 +102,7 @@ const FilterMovil = ({
                             />
 
 
-                            <SubmitFilter onReset={onReset}/>
+                            <SubmitFilter />
 
 
                         </form>

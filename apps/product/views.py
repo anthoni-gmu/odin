@@ -16,9 +16,9 @@ from django.conf import settings
 
 class ResponsePagination(PageNumberPagination):
     page_query_param = 'p'
-    page_size = 3
+    page_size = 6
     page_size_query_param = 'page_size'
-    max_page_size = 3
+    max_page_size = 6
 
 class ListProductsView(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -251,6 +251,8 @@ class ListBySearchView(APIView):
 
     def post(self, request, format=None):
         data = self.request.data
+        paginator= ResponsePagination()
+
 
         search= data['search']
 
@@ -352,13 +354,13 @@ class ListBySearchView(APIView):
             product_results = product_results.order_by(sort_by)
         else:
             product_results = product_results.order_by(sort_by)
+        
+        product_results = paginator.paginate_queryset(product_results, request)
+        product_results = ProductSerializer(product_results, many=True, context={'request':request})
 
-        product_results = ProductSerializer(product_results, many=True)
 
         if len(product_results.data) > 0:
-            return Response(
-                {'filtered_products': product_results.data,'filters':{'search':search,'category_id':category_id}},
-                status=status.HTTP_200_OK)
+            return paginator.get_paginated_response(product_results.data)
         else:
             return Response(
                 {'error': 'No products found'},

@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import { connect } from 'react-redux'
 import { get_categories } from '../redux/actions/categories'
 import { get_colors } from '../redux/actions/colors'
-import { get_products, get_filtered_products, get_pages_products } from '../redux/actions/product'
+import { get_products, get_filtered_products, get_pages_products, get_pages_filters } from '../redux/actions/product'
 import ProductCard from '../components/product/ProductCart'
 import { prices } from '../helpers/fixedPrices'
 import FilterMovil from '../components/shop/FiltersMovil'
@@ -13,13 +13,11 @@ import Filter from '../components/shop/Filters'
 
 
 const Shop = ({
-  filters,
   get_categories,
   categories,
   get_products,
   products,
   get_filtered_products,
-  filtered_products,
   get_colors,
   colors,
   get_pages_products,
@@ -28,33 +26,28 @@ const Shop = ({
   count,
 }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [filtered, setFiltered] = useState(false);
 
 
   const navigationOn = 'bg-white rounded-md  hover:bg-blue-500  hover:text-white px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform'
   const navigationOff = 'bg-gray-200 cursor-not-allowed px-4 py-2 mx-1 text-gray-500 capitalize  rounded-md '
 
   const nextPage = async () => {
-    console.log("next")
 
-    await get_pages_products(next)
-    setFiltered(false)
+    await get_pages_products(next, search, color_id, category_id, price_range, sortBy, order)
   }
   const previousPage = async () => {
+    await get_pages_products(previous, search, color_id, category_id, price_range, sortBy, order)
 
-    console.log("previous")
-    await get_pages_products(previous)
-    setFiltered(false)
   }
 
 
   const [formData, setFormData] = useState({
-    category_id: filters && filters !== null && filters !== undefined ? filters.category_id : '0',
+    category_id: '0',
     color_id: '0',
     price_range: 'Any',
     sortBy: 'created',
     order: 'desc',
-    search: filters && filters !== null && filters !== undefined !== null ? filters.search : ''
+    search: ''
   });
 
 
@@ -69,63 +62,43 @@ const Shop = ({
 
   useEffect(() => {
     get_categories()
-    previous !== null ? console.log("true") : get_products()
+    products !== null ? console.log("true") : get_products()
     get_colors()
-
     window.scrollTo(0, 0)
-    setFiltered(true)
   }, [])
 
 
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
-  const Reset = (formData) => {
-    formData.category_id = '0'
-    formData.price_range = 'Any'
-    formData.sortBy = 'created'
-    formData.color_id = '0'
-    formData.search = ''
-    formData.order = 'desc'
-    return formData
 
-  }
 
   const onSubmit = e => {
     e.preventDefault()
     get_filtered_products(search, color_id, category_id, price_range, sortBy, order)
-    setFiltered(true)
-  }
-
-  const onReset = e => {
-    e.preventDefault()
-    console.log("reset")
-    Reset(formData)
-    console.log(category_id)
-    setFiltered(false)
   }
 
 
+
+  const showNotProduct = () => {
+    return (
+
+
+
+      <div className="px-4 py-2 -mx-3">
+        <div className="mx-3">
+          <span className="font-semibold text-emerald-500 dark:text-emerald-400">Not Products</span>
+          <p className="text-sm text-gray-600 dark:text-gray-200">Your account was registered!</p>
+        </div>
+      </div>
+    )
+  }
 
   const showProducts = () => {
     let results = []
     let display = []
 
     if (
-      filtered &&
-      filtered_products &&
-      filtered_products !== null &&
-      filtered_products !== undefined
-    ) {
-      filtered_products.map((product, index) => {
-        return display.push(
-          <div key={index}>
-            <ProductCard product={product} />
-          </div>
-        );
-      });
-    } else if (
-
       products &&
       products !== null &&
       products !== undefined
@@ -137,17 +110,21 @@ const Shop = ({
           </div>
         );
       });
+
+      for (let i = 0; i < display.length; i += 3) {
+        results.push(
+          <div key={i} className='grid md:grid-cols-3 '>
+            {display[i] ? display[i] : <div className=''></div>}
+            {display[i + 1] ? display[i + 1] : <div className=''></div>}
+            {display[i + 2] ? display[i + 2] : <div className=''></div>}
+          </div>
+        )
+      }
     }
 
-    for (let i = 0; i < display.length; i += 3) {
-      results.push(
-        <div key={i} className='grid md:grid-cols-3 '>
-          {display[i] ? display[i] : <div className=''></div>}
-          {display[i + 1] ? display[i + 1] : <div className=''></div>}
-          {display[i + 2] ? display[i + 2] : <div className=''></div>}
-        </div>
-      )
-    }
+
+
+
 
     return results
 
@@ -161,7 +138,7 @@ const Shop = ({
         <div>
           {/* Mobile filter dialog */}
 
-          <FilterMovil onReset={onReset} search={search} color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+          <FilterMovil search={search} color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
@@ -187,13 +164,13 @@ const Shop = ({
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
                 {/* Filters */}
 
-                <Filter onReset={onReset} search={search} color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+                <Filter search={search} color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
                 {/* Product grid */}
                 <div className="lg:col-span-3">
                   {/* Replace with your content */}
 
-                  {products && showProducts()}
+                  {products !== null ? showProducts() : showNotProduct()}
 
 
 
@@ -205,7 +182,7 @@ const Shop = ({
                       <div className="flex items-center -mx-1">
                         <ChevronLeftIcon className="w-6 h-6 mx-1" />
                         <span className="mx-1">
-                          previous
+                          Anterior
                         </span>
                       </div>
                     </button>
@@ -214,7 +191,7 @@ const Shop = ({
                     <button onClick={e => nextPage(e)} className={` ${next !== null ? navigationOn : navigationOff}  `} disabled={next !== null ? false : true}>
                       <div className="flex items-center -mx-1">
                         <span className="mx-1">
-                          Next
+                          Siguiente
                         </span>
 
                         <ChevronRightIcon className="w-6 h-6 mx-1" />
@@ -238,8 +215,6 @@ const mapStateToProps = state => ({
   categories: state.Categories.categories,
   colors: state.Colors.colors,
   products: state.Product.products,
-  filtered_products: state.Product.filtered_products,
-  filters: state.Product.filters,
 
   count: state.Product.count,
   next: state.Product.next,
@@ -252,5 +227,5 @@ export default connect(mapStateToProps, {
   get_colors,
   get_products,
   get_filtered_products,
-  get_pages_products
+  get_pages_products,
 })(Shop)

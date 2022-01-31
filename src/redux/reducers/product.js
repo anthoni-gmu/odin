@@ -10,8 +10,7 @@ import {
     GET_PRODUCTS_BY_ARRIVAL_FAIL,
     GET_PRODUCTS_BY_SOLD_OK,
     GET_PRODUCTS_BY_SOLD_FAIL,
-    SEARCH_PRODUCTS_OK,
-    SEARCH_PRODUCTS_FAIL,
+
     FILTER_PRODUCTS_OK,
     FILTER_PRODUCTS_FAIL
 
@@ -108,25 +107,20 @@ export default function Product(state = initialState, action) {
         case FILTER_PRODUCTS_OK:
             return {
                 ...state,
-                filtered_products: payload.filtered_products,
-                filters: payload.filters
+                products: payload.results,
+                count: payload.count,
+                next: payload.next,
+                previous: payload.previous
             }
         case FILTER_PRODUCTS_FAIL:
             return {
                 ...state,
-                filtered_products: null,
-                filters: null
+                products: null,
+                count:null,
+                next: null,
+                previous: null
             }
-        case SEARCH_PRODUCTS_OK:
-            return {
-                ...state,
-                search_products: payload.search_products
-            }
-        case SEARCH_PRODUCTS_FAIL:
-            return {
-                ...state,
-                search_products: null
-            }
+ 
 
         default:
             return state;

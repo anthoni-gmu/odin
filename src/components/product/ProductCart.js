@@ -4,7 +4,6 @@ const ProductCard = ({ product
 
 }) => {
 
-
     return (
         <div key={product.id} className="group relative m-2">
 

@@ -10,8 +10,7 @@ import {
     GET_PRODUCTS_BY_ARRIVAL_FAIL,
     GET_PRODUCTS_BY_SOLD_OK,
     GET_PRODUCTS_BY_SOLD_FAIL,
-    SEARCH_PRODUCTS_OK,
-    SEARCH_PRODUCTS_FAIL,
+
     FILTER_PRODUCTS_OK,
     FILTER_PRODUCTS_FAIL
 } from "./types"
@@ -73,34 +72,77 @@ export const get_product = (productId) => async dispatch => {
         });
     }
 }
-export const get_pages_products = (url) => async dispatch => {
 
-    const config = {
-        headers: {
-            'Accept': 'application/json'
-        }
-    };
 
-    try {
-        const res = await axios.get(`${url}`, config);
+export const get_pages_products = (url,search, color_id,category_id, price_range, sort_by, order) => async dispatch => {
 
-        if (res.status === 200) {
+    if(search!=='' ||color_id!=='0' ||category_id!=='0' ||price_range!== 'Any' ||sort_by!=='created' || order !== 'desc' ){
+        const config = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const body = JSON.stringify({
+            color_id,
+            category_id,
+            price_range,
+            sort_by,
+            order,
+            search
+        });
+    
+        try {
+            const res = await axios.post(`${url}`,  body, config);
+    
+            if (res.status === 200 ) {
+                dispatch({
+                    type: FILTER_PRODUCTS_OK,
+                    payload: res.data
+                });
+            } else {
+                dispatch({
+                    type: FILTER_PRODUCTS_FAIL
+                });
+            }
+        } catch (err) {
             dispatch({
-                type: GET_PRODUCTS_OK,
-                payload: res.data
+                type: FILTER_PRODUCTS_FAIL
             });
-        } else {
+        }
+    }else{
+        const config = {
+            headers: {
+                'Accept': 'application/json'
+            }
+        };
+    
+        try {
+            const res = await axios.get(`${url}`, config);
+    
+            if (res.status === 200) {
+                dispatch({
+                    type: GET_PRODUCTS_OK,
+                    payload: res.data
+                });
+            } else {
+                dispatch({
+                    type: GET_PRODUCTS_FAIL
+                });
+            }
+    
+        } catch (err) {
             dispatch({
                 type: GET_PRODUCTS_FAIL
             });
         }
-
-    } catch (err) {
-        dispatch({
-            type: GET_PRODUCTS_FAIL
-        });
     }
+
+    
 }
+
+
 
 export const get_products_by_arrival = () => async dispatch => {
     const config = {
@@ -222,35 +264,3 @@ export const get_filtered_products = (search, color_id,category_id, price_range,
     }
 }
 
-export const get_search_products = (search, category_id) => async dispatch => {
-    const config = {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    };
-
-    const body = JSON.stringify({
-        search,
-        category_id
-    });
-
-    try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/product/search`, body, config);
-
-        if (res.status === 200) {
-            dispatch({
-                type: SEARCH_PRODUCTS_OK,
-                payload: res.data
-            });
-        } else {
-            dispatch({
-                type: SEARCH_PRODUCTS_FAIL
-            });
-        }
-    } catch (err) {
-        dispatch({
-            type: SEARCH_PRODUCTS_FAIL
-        });
-    }
-}
