@@ -16,9 +16,55 @@ from django.conf import settings
 
 class ResponsePagination(PageNumberPagination):
     page_query_param = 'p'
-    page_size = 2
+    page_size = 3
     page_size_query_param = 'page_size'
-    max_page_size = 2
+    max_page_size = 3
+
+class ListProductsView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        sortBy = request.query_params.get('sortBy')
+        paginator= ResponsePagination()
+        if not (sortBy == 'date_added' or sortBy == 'price' or sortBy == 'sold' or sortBy == 'title'):
+            sortBy = 'date_added'
+
+        order = request.query_params.get('order')
+        limit = request.query_params.get('limit')
+
+        if not limit:
+            limit = 6
+
+        try:
+            limit = int(limit)
+        except:
+            return Response(
+                {'error': 'Limit must be an integer'},
+                status=status.HTTP_404_NOT_FOUND)
+
+        if limit <= 0:
+            limit = 6
+
+        if order == 'desc':
+            sortBy = '-' + sortBy
+            products = Product.objects.order_by(sortBy).all()[:int(limit)]
+        elif order == 'asc':
+            products = Product.objects.order_by(sortBy).all()[:int(limit)]
+        else:
+            products = Product.objects.order_by(sortBy).all()
+        products = paginator.paginate_queryset(products, request)
+
+        products = ProductSerializer(products, many=True , context={'request':request})
+
+        if products:
+
+            return paginator.get_paginated_response(products.data)
+            
+        else:
+            return Response(
+                {'error': 'No products to list'},
+                status=status.HTTP_404_NOT_FOUND)
+
 
 
 class ProductDetailView(APIView):
@@ -129,48 +175,6 @@ class ListProductsHomeView(APIView):
 #                 {'error': 'No products to list'},
 #                 status=status.HTTP_404_NOT_FOUND)
 
-
-class ListProductsView(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    def get(self, request, format=None):
-        sortBy = request.query_params.get('sortBy')
-
-        if not (sortBy == 'date_added' or sortBy == 'price' or sortBy == 'sold' or sortBy == 'title'):
-            sortBy = 'date_added'
-
-        order = request.query_params.get('order')
-        limit = request.query_params.get('limit')
-
-        if not limit:
-            limit = 6
-
-        try:
-            limit = int(limit)
-        except:
-            return Response(
-                {'error': 'Limit must be an integer'},
-                status=status.HTTP_404_NOT_FOUND)
-
-        if limit <= 0:
-            limit = 6
-
-        if order == 'desc':
-            sortBy = '-' + sortBy
-            products = Product.objects.order_by(sortBy).all()[:int(limit)]
-        elif order == 'asc':
-            products = Product.objects.order_by(sortBy).all()[:int(limit)]
-        else:
-            products = Product.objects.order_by(sortBy).all()
-
-        products = ProductSerializer(products, many=True)
-
-        if products:
-            return Response({'products': products.data}, status=status.HTTP_200_OK)
-        else:
-            return Response(
-                {'error': 'No products to list'},
-                status=status.HTTP_404_NOT_FOUND)
 
 
 class ListSearchView(APIView):
@@ -353,7 +357,7 @@ class ListBySearchView(APIView):
 
         if len(product_results.data) > 0:
             return Response(
-                {'filtered_products': product_results.data},
+                {'filtered_products': product_results.data,'filters':{'search':search,'category_id':category_id}},
                 status=status.HTTP_200_OK)
         else:
             return Response(

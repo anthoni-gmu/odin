@@ -73,6 +73,34 @@ export const get_product = (productId) => async dispatch => {
         });
     }
 }
+export const get_pages_products = (url) => async dispatch => {
+
+    const config = {
+        headers: {
+            'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${url}`, config);
+
+        if (res.status === 200) {
+            dispatch({
+                type: GET_PRODUCTS_OK,
+                payload: res.data
+            });
+        } else {
+            dispatch({
+                type: GET_PRODUCTS_FAIL
+            });
+        }
+
+    } catch (err) {
+        dispatch({
+            type: GET_PRODUCTS_FAIL
+        });
+    }
+}
 
 export const get_products_by_arrival = () => async dispatch => {
     const config = {

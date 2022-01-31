@@ -13,6 +13,7 @@ const FilterCategories = ({
                     value={0}
                     type='radio'
                     className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
+                    defaultChecked
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-700">
                     Todos
@@ -28,6 +29,7 @@ const FilterCategories = ({
                         return (
                             <div key={category.id} className=' flex items-center h-5 my-5'>
                                 <input
+                                    
                                     name='category_id'
                                     onChange={e => onChange(e)}
                                     value={category.id.toString()}

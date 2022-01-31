@@ -1,24 +1,19 @@
 import Layout from '../layout/Layout'
 import { Fragment, useState, useEffect } from 'react'
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
-import { FilterIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
-import { Link } from 'react-router-dom'
+import { FilterIcon } from '@heroicons/react/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import { connect } from 'react-redux'
 import { get_categories } from '../redux/actions/categories'
 import { get_colors } from '../redux/actions/colors'
-import { get_products, get_filtered_products } from '../redux/actions/product'
+import { get_products, get_filtered_products, get_pages_products } from '../redux/actions/product'
 import ProductCard from '../components/product/ProductCart'
 import { prices } from '../helpers/fixedPrices'
-
-import bg from '../img/banner/hero.jpg'
-
-
 import FilterMovil from '../components/shop/FiltersMovil'
 import Filter from '../components/shop/Filters'
 
 
 const Shop = ({
+  filters,
   get_categories,
   categories,
   get_products,
@@ -26,18 +21,42 @@ const Shop = ({
   get_filtered_products,
   filtered_products,
   get_colors,
-  colors
+  colors,
+  get_pages_products,
+  previous,
+  next,
+  count,
 }) => {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [filtered, setFiltered] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filtered, setFiltered] = useState(false);
+
+
+  const navigationOn = 'bg-white rounded-md  hover:bg-blue-500  hover:text-white px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform'
+  const navigationOff = 'bg-gray-200 cursor-not-allowed px-4 py-2 mx-1 text-gray-500 capitalize  rounded-md '
+
+  const nextPage = async () => {
+    console.log("next")
+
+    await get_pages_products(next)
+    setFiltered(false)
+  }
+  const previousPage = async () => {
+
+    console.log("previous")
+    await get_pages_products(previous)
+    setFiltered(false)
+  }
+
+
   const [formData, setFormData] = useState({
-    category_id: '0',
+    category_id: filters && filters !== null && filters !== undefined ? filters.category_id : '0',
     color_id: '0',
     price_range: 'Any',
     sortBy: 'created',
     order: 'desc',
-    search:''
-  })
+    search: filters && filters !== null && filters !== undefined !== null ? filters.search : ''
+  });
+
 
   const {
     category_id,
@@ -50,29 +69,53 @@ const Shop = ({
 
   useEffect(() => {
     get_categories()
+    previous !== null ? console.log("true") : get_products()
     get_colors()
 
-    get_products()
     window.scrollTo(0, 0)
+    setFiltered(true)
   }, [])
+
+
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
+  const Reset = (formData) => {
+    formData.category_id = '0'
+    formData.price_range = 'Any'
+    formData.sortBy = 'created'
+    formData.color_id = '0'
+    formData.search = ''
+    formData.order = 'desc'
+    return formData
+
+  }
+
   const onSubmit = e => {
     e.preventDefault()
-    get_filtered_products(search,color_id, category_id, price_range, sortBy, order)
+    get_filtered_products(search, color_id, category_id, price_range, sortBy, order)
     setFiltered(true)
   }
+
+  const onReset = e => {
+    e.preventDefault()
+    console.log("reset")
+    Reset(formData)
+    console.log(category_id)
+    setFiltered(false)
+  }
+
+
 
   const showProducts = () => {
     let results = []
     let display = []
 
     if (
+      filtered &&
       filtered_products &&
       filtered_products !== null &&
-      filtered_products !== undefined &&
-      filtered
+      filtered_products !== undefined
     ) {
       filtered_products.map((product, index) => {
         return display.push(
@@ -82,7 +125,7 @@ const Shop = ({
         );
       });
     } else if (
-      !filtered &&
+
       products &&
       products !== null &&
       products !== undefined
@@ -118,7 +161,7 @@ const Shop = ({
         <div>
           {/* Mobile filter dialog */}
 
-          <FilterMovil search={search} color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+          <FilterMovil onReset={onReset} search={search} color_id={color_id} price_range={price_range} mobileFiltersOpen={mobileFiltersOpen} sortBy={sortBy} order={order} setMobileFiltersOpen={setMobileFiltersOpen} Fragment={Fragment} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
@@ -144,13 +187,42 @@ const Shop = ({
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
                 {/* Filters */}
 
-                <Filter search={search} color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
+                <Filter onReset={onReset} search={search} color_id={color_id} price_range={price_range} sortBy={sortBy} order={order} onSubmit={onSubmit} onChange={onChange} categories={categories} prices={prices} colors={colors} />
 
                 {/* Product grid */}
                 <div className="lg:col-span-3">
                   {/* Replace with your content */}
 
                   {products && showProducts()}
+
+
+
+
+
+
+                  <div className="flex">
+                    <button className={`${previous !== null ? navigationOn : navigationOff}  `} onClick={e => previousPage(e)} disabled={previous !== null ? false : true} >
+                      <div className="flex items-center -mx-1">
+                        <ChevronLeftIcon className="w-6 h-6 mx-1" />
+                        <span className="mx-1">
+                          previous
+                        </span>
+                      </div>
+                    </button>
+
+
+                    <button onClick={e => nextPage(e)} className={` ${next !== null ? navigationOn : navigationOff}  `} disabled={next !== null ? false : true}>
+                      <div className="flex items-center -mx-1">
+                        <span className="mx-1">
+                          Next
+                        </span>
+
+                        <ChevronRightIcon className="w-6 h-6 mx-1" />
+                      </div>
+                    </button>
+                  </div>
+
+
 
                 </div>
               </div>
@@ -166,12 +238,19 @@ const mapStateToProps = state => ({
   categories: state.Categories.categories,
   colors: state.Colors.colors,
   products: state.Product.products,
-  filtered_products: state.Product.filtered_products
+  filtered_products: state.Product.filtered_products,
+  filters: state.Product.filters,
+
+  count: state.Product.count,
+  next: state.Product.next,
+  previous: state.Product.previous
+
 })
 
 export default connect(mapStateToProps, {
   get_categories,
   get_colors,
   get_products,
-  get_filtered_products
+  get_filtered_products,
+  get_pages_products
 })(Shop)

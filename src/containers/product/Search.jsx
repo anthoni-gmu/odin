@@ -44,7 +44,6 @@ const Search = ({
 
     useEffect(() => {
         get_colors()
-
         get_categories()
         get_products()
         window.scrollTo(0, 0)

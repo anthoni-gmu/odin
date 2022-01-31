@@ -7,6 +7,7 @@ import MoreFilters from "./filters/MoreFilters"
 import Search from "./filters/Search"
 import SubmitFilter from "./filters/SubmitFilter"
 const Filter = ({
+    onReset,
     search,
     price_range,
     sortBy,
@@ -51,8 +52,11 @@ const Filter = ({
 
             />
 
-            <SubmitFilter />
+            <SubmitFilter onReset={onReset}/>
         </form>
+
+
+
     )
 }
 

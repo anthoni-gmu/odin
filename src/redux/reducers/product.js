@@ -27,7 +27,12 @@ const initialState = {
     products_sold: null,
     search_products: null,
     filtered_products: null,
-    categories:null
+    categories: null,
+    filters: null,
+
+    count: null,
+    next: null,
+    previous: null,
 }
 
 export default function Product(state = initialState, action) {
@@ -37,12 +42,18 @@ export default function Product(state = initialState, action) {
         case GET_PRODUCTS_OK:
             return {
                 ...state,
-                products: payload.products
+                products: payload.results,
+                count: payload.count,
+                next: payload.next,
+                previous: payload.previous
             }
         case GET_PRODUCTS_FAIL:
             return {
                 ...state,
-                products: null
+                products: null,
+                count: null,
+                next: null,
+                previous: null
             }
         case GET_PRODUCT_OK:
             return {
@@ -97,12 +108,14 @@ export default function Product(state = initialState, action) {
         case FILTER_PRODUCTS_OK:
             return {
                 ...state,
-                filtered_products: payload.filtered_products
+                filtered_products: payload.filtered_products,
+                filters: payload.filters
             }
         case FILTER_PRODUCTS_FAIL:
             return {
                 ...state,
-                filtered_products: null
+                filtered_products: null,
+                filters: null
             }
         case SEARCH_PRODUCTS_OK:
             return {

@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { Link, Navigate } from 'react-router-dom';
 import Related from '../components/homepage/Related'
 import Categories from '../components/homepage/Categories'
-
+import {  get_filtered_products } from '../redux/actions/product'
 import {
     get_categories,
 } from '../redux/actions/categories'
@@ -13,17 +13,35 @@ import {
 import herobanner from "../img/banner/hero2.jpeg"
 
 
-import {
-    get_search_products
-} from '../redux/actions/product'
+
 
 import SearchLarge from '../components/homepage/SearchLarge';
 
 const Home = ({
     get_products_frontpage,
     related, categories,
-    get_search_products
+    get_filtered_products
 }) => {
+
+
+    const [formData, setFormData] = useState({
+        category_id: '0',
+        color_id: '0',
+        price_range: 'Any',
+        sortBy: 'created',
+        order: 'desc',
+        search: ''
+    })
+
+    const {
+        category_id,
+        price_range,
+        sortBy,
+        order,
+        color_id,
+        search
+    } = formData
+
 
 
     useEffect(() => {
@@ -32,23 +50,19 @@ const Home = ({
     }, []);
     const [render, setRender] = useState(false);
 
-    const [formData, setFormData] = useState({
-        category_id: 0,
-        search: ''
-    });
-
-    const { category_id, search } = formData;
+  
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
     const onSubmit = e => {
-        e.preventDefault();
-        get_search_products(search, category_id);
+        e.preventDefault()
+        console.log(search,category_id)
+        get_filtered_products(search,color_id, category_id, price_range, sortBy, order)
         setRender(!render);
-    }
-    if(render){
-
-        return <Navigate to='/search' />
       }
+    if (render) {
+
+        return <Navigate to='/shop' />
+    }
 
     return (
 
@@ -110,10 +124,10 @@ const Home = ({
             {/* Search */}
             <div className=" bg-slate-50">
                 <div className=" max-w-2xl mx-auto  px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 ">
-                <SearchLarge categories={categories} onChange={onChange} onSubmit={onSubmit} search={search} />
+                    <SearchLarge categories={categories} category_id={category_id} onChange={onChange} onSubmit={onSubmit} search={search} />
                 </div>
 
-                
+
             </div>
 
 
@@ -137,7 +151,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     get_products_frontpage,
     get_categories,
-    get_search_products
+    get_filtered_products
 
 })(Home)
 
