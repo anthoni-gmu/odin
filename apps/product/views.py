@@ -103,9 +103,10 @@ class ProductDetailView(APIView):
             product.save()
 
             # Serializers
-            product = ProductSerializer(product)
-            related_products = ProductSerializer(related_products, many=True)
-            products_colors = ProductSerializer(products_colors, many=True)
+            product = ProductSerializer(product,context={"request": request})
+            related_products = random(related_products, 4)
+            related_products = ProductSerializer(related_products, many=True,context={"request": request})
+            products_colors = ProductSerializer(products_colors, many=True,context={"request": request})
 
             return Response({
                 'product': product.data,
@@ -130,16 +131,16 @@ class ListProductsHomeView(APIView):
 
         if products_featured:
             products_featured = random(products_featured, 4)
-            products_featured = ProductSerializer(products_featured, many=True)
+            products_featured = ProductSerializer(products_featured, many=True,context={"request": request})
 
             products_news = random(products_news, 4)
-            products_news = ProductSerializer(products_news, many=True)
+            products_news = ProductSerializer(products_news, many=True,context={"request": request})
 
             products_views = random(products_views, 4)
-            products_views = ProductSerializer(products_views, many=True)
+            products_views = ProductSerializer(products_views, many=True,context={"request": request})
 
             products_sold = random(products_sold, 4)
-            products_sold = ProductSerializer(products_sold, many=True)
+            products_sold = ProductSerializer(products_sold, many=True,context={"request": request})
 
             return Response(
                 {'categories': {
@@ -153,27 +154,6 @@ class ListProductsHomeView(APIView):
             return Response(
                 {'error': 'No products to list'},
                 status=status.HTTP_404_NOT_FOUND)
-
-# class ListProductsHomeView(APIView):
-#     permission_classes = (permissions.AllowAny, )
-
-#     def get(self, request, format=None):
-#         products_featured = list(Product.objects.filter(is_featured=True))
-
-
-#         if products_featured:
-#             products_featured = random(products_featured, 4)
-
-#             paginator = ResponsePagination()
-#             result = paginator.paginate_queryset(products_featured,request)
-
-#             products_featured = ProductSerializer(result, many=True)
-
-#             return paginator.get_paginated_response(products_featured.data)
-#         else:
-#             return Response(
-#                 {'error': 'No products to list'},
-#                 status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -356,7 +336,7 @@ class ListBySearchView(APIView):
             product_results = product_results.order_by(sort_by)
         
         product_results = paginator.paginate_queryset(product_results, request)
-        product_results = ProductSerializer(product_results, many=True, context={'request':request})
+        product_results = ProductSerializer(product_results, many=True,context={"request": request})
 
 
         if len(product_results.data) > 0:

@@ -44,6 +44,11 @@ export const GET_CATEGORIES_FAIL = 'GET_CATEGORIES_FAIL';
 export const GET_COLOR_OK = 'GET_COLOR_OK';
 export const GET_COLOR_FAIL = 'GET_COLOR_FAIL';
 
+//sizes
+
+export const GET_SIZE_OK = 'GET_SIZE_OK';
+export const GET_SIZE_FAIL = 'GET_SIZE_FAIL';
+
 // Products 
 
 export const GET_PRODUCT_OK = "GET_PRODUCT_OK"

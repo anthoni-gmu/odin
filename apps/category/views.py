@@ -3,8 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 
-from .models import Category
-from .models import Color
+from .models import Category, Size, Color
 
 
 class ListCategoriesView(APIView):
@@ -39,8 +38,6 @@ class ListCategoriesView(APIView):
             return Response({'error': 'No categories found'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
-
 class ListColorView(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -59,3 +56,23 @@ class ListColorView(APIView):
             return Response({'colors': result}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'No color found'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ListSizesView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        if Size.objects.all().exists():
+            sizes = Size.objects.all()
+
+            result = []
+
+            for size in sizes:
+                item = {}
+                item['id'] = size.id
+                item['name'] = size.name
+
+                result.append(item)
+            return Response({'sizes': result}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'No size found'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

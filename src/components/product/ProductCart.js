@@ -9,7 +9,7 @@ const ProductCard = ({ product
 
             <div className="shadow-lg rounded-2xl  bg-white w-auto m-auto p-1">
                 <Link to={`/product/${product.id}`}>
-                    <img alt="" src={product.photo} />
+                    <img alt="" src={product.photo_url} />
                 </Link>
                 <div className="bg-slate-400 m-3 p-4 rounded-lg">
                     <Link to={`/product/${product.id}`} className="text-white text-xl font-bold ">

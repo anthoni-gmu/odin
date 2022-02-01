@@ -5,6 +5,7 @@ import Alert from "./alert";
 import Product from "./product";
 import Categories from './categories';
 import Colors from './colors';
+import Sizes from './sizes';
 
 
 
@@ -13,5 +14,6 @@ export default combineReducers({
     Alert,
     Product,
     Categories,
-    Colors
+    Colors,
+    Sizes
 })
