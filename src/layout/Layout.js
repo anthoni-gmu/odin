@@ -7,6 +7,13 @@ import Navbar from "../components/page/Navbar"
 
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+
+import {
+    get_items,
+    get_total,
+    get_item_total
+} from "../redux/actions/cart";
+
 const Layaut = (props) => {
 
 
@@ -14,6 +21,9 @@ const Layaut = (props) => {
         props.refresh()
         props.check_authenticated()
         props.load_user()
+        props.get_items()
+        props.get_total()
+        props.get_item_total()
     }, []);
 
     return (
@@ -30,5 +40,8 @@ const Layaut = (props) => {
 export default connect(null, {
     check_authenticated,
     load_user,
-    refresh
+    refresh,
+    get_items,
+    get_total,
+    get_item_total,
 })(Layaut)

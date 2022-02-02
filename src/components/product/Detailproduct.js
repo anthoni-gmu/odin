@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import Sizes from './detail/Sizes'
 
 export default function ProductDetail({
-    product, catProduct, colors
+    product, catProduct, colors,addToCart
 }) {
 
     return (
@@ -67,7 +67,7 @@ export default function ProductDetail({
                         <div className="flex">
                             <span className="title-font font-medium text-2xl text-gray-900">${product.price}</span>
 
-                            <button className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
+                            <button onClick={addToCart} className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
                                 <ShoppingCartIcon className='w-6 h-6' />
                             </button>
                             <button className=" rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">

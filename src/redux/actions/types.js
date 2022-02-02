@@ -69,3 +69,40 @@ export const GET_PRODUCTS_BY_SOLD_FAIL = 'GET_PRODUCTS_BY_SOLD_FAIL';
 
 export const FILTER_PRODUCTS_OK = 'FILTER_PRODUCTS_OK';
 export const FILTER_PRODUCTS_FAIL = 'FILTER_PRODUCTS_FAIL';
+
+
+// Carrito Local (frontend)
+export const ADD_ITEM = 'ADD_ITEM';
+
+export const GET_TOTAL = 'GET_TOTAL';
+export const GET_ITEM_TOTAL = 'GET_ITEM_TOTAL';
+export const GET_ITEMS = 'GET_ITEMS';
+
+export const UPDATE_ITEM = 'UPDATE_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const EMPTY_CART = 'EMPTY_CART';
+
+// Cart (base de datos)
+export const ADD_ITEM_OK = 'ADD_ITEM_OK';
+export const ADD_ITEM_FAIL = 'ADD_ITEM_FAIL';
+
+export const GET_TOTAL_OK = 'GET_TOTAL_OK';
+export const GET_TOTAL_FAIL = 'GET_TOTAL_FAIL';
+
+export const GET_ITEM_TOTAL_OK = 'GET_ITEM_TOTAL_OK';
+export const GET_ITEM_TOTAL_FAIL = 'GET_ITEM_TOTAL_FAIL';
+
+export const GET_ITEMS_OK = 'GET_ITEMS_OK';
+export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
+
+export const UPDATE_ITEM_OK = 'UPDATE_ITEM_OK';
+export const UPDATE_ITEM_FAIL = 'UPDATE_ITEM_FAIL';
+
+export const REMOVE_ITEM_OK = 'REMOVE_ITEM_OK';
+export const REMOVE_ITEM_FAIL = 'REMOVE_ITEM_FAIL';
+
+export const EMPTY_CART_OK= 'EMPTY_CART_OK';
+export const EMPTY_CART_FAIL = 'EMPTY_CART_FAIL';
+
+export const SYNCH_CART_OK = 'SYNCH_CART_OK';
+export const SYNCH_CART_FAIL = 'SYNCH_CART_FAIL';
