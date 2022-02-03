@@ -1,11 +1,19 @@
 import { Menu, Transition, Popover } from '@headlessui/react'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { BellIcon, ShoppingCartIcon, ChevronDownIcon } from '@heroicons/react/solid'
-import { MinusCircleIcon } from '@heroicons/react/outline'
-import { ic_logout } from 'react-icons-kit/md/ic_logout'
+import { BellIcon, ShoppingCartIcon, ChevronDownIcon  } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'
+
+import DropCartProduct from '../cart/DropCartProduct'
+
+
+import {
+  remove_item, get_items,
+  get_total,
+  get_item_total
+} from "../../redux/actions/cart";
+
 
 const usertest = {
   name: 'Tom Cook',
@@ -26,13 +34,27 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+
 const Dropauth = ({
   amount,
   logout,
   totalItems,
-  items
+  items,
+  remove_item,
+  get_items,
+  get_total,
+  get_item_total
 
 }) => {
+  const [render, setRender] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    get_items()
+    get_total()
+    get_item_total()
+  }, [render])
+
   const [redirect, setRedirect] = useState(false);
   const logoutHandler = () => {
     logout();
@@ -47,14 +69,6 @@ const Dropauth = ({
   return (
     <div className="hidden md:block">
       <div className="ml-4 flex items-center md:ml-6">
-
-
-
-
-        {/* <Link to={'/cart'} className="relative bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-          <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-          <div className="absolute -top-3 -right-3 px-2.5 py-0.5 bg-slate-400 rounded-full text-white text-xs">1</div>
-        </Link> */}
 
         <Popover className="relative">
           {({ open }) => (
@@ -81,81 +95,65 @@ const Dropauth = ({
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 ">
+                <Popover.Panel className=" absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 ">
                   <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                     <div className="relative  bg-white p-7">
-
-
-
-
                       {
-                        items !== null && items && items.map((item) => (
+
+                        items !== null && items.length !== 0 && items ? items.map((item) => (
                           <div key={item.id} className="flex flex-col  sm:flex-row sm:justify-between">
-                            <div className="flex w-full space-x-2 sm:space-x-1">
-                              <img className="flex-shrink-0 object-cover w-20 h-20 dark:border-transparent rounded outline-none sm:w-32 sm:h-32 dark:bg-coolGray-500" src={item.product.photo_url} alt={item.product.title} />
-                              <div className="flex flex-col justify-between w-full pb-4">
-                                <div className="flex justify-between w-full pb-2 space-x-2">
-                                  <div className="space-y-1">
-                                    <h3 className="text-lg font-semibold leading-snug sm:pr-8">{item.product.title}</h3>
-                                    {/* <p className="text-sm dark:text-coolGray-400">Classic</p> */}
-                                  </div>
-                                  <div className="text-right">
-                                    <p className="text-lg font-semibold text-gray-500">{item.count}</p>
-
-                                    <p className="text-lg font-semibold text-gray-500">${item.product.price}</p>
-                                    {/* <p className="text-sm line-through dark:text-coolGray-600">75.50€</p> */}
-                                  </div>
-                                </div>
-                                <div className="flex flex-wrap border-b-2 my-2">
-                                  <h1 className="flex-auto text-base font-semibold ">
-                                    Total
-                                  </h1>
-                                  <div className="text-xl font-semibold  ">
-                                    ${item.product.price * item.count}
-                                  </div>
-
-                                </div>
-                                <div className="flex text-sm divide-x">
-                                  <button type="button" className="flex items-center px-2 py-1 pl-0 space-x-1 hover:text-deep-orange-accent-400">
-                                    <MinusCircleIcon className='w-5 h-5' />
-                                    <span>Eliminar</span>
-                                  </button>
-
-                                </div>
-                              </div>
-                            </div>
+                            <DropCartProduct setRender={setRender} render={render} item={item} remove_item={remove_item} />
                           </div>
 
-                        ))}
+
+                        )) :
+
+                          <div className="w-full h-full text-center">
+                            <div className="flex h-full flex-col justify-between">
+                            
+                            <ShoppingCartIcon className="mt-4 w-16 h-w-16 m-auto text-gray-600" aria-hidden="true" />
 
 
+                              <p className="text-gray-900 text-lg font-medium mt-4">
+                                ¡No hay productos en el carrito!
+                              </p>
+
+                            </div>
+                          </div>
+                      }
 
                     </div>
-                    <div className="p-4 bg-gray-50 w-full ">
-                      <div className="flex flex-wrap border-b-2 my-2">
-                        <h1 className="flex-auto text-base font-semibold ">
-                          Total a pagar
-                        </h1>
-                        <div className="text-xl font-semibold text-gray-500 ">
-                          ${amount}
+                    {
+                      items !== null && items.length !== 0 && items ?
+                        <div className="p-4 bg-gray-50 w-full ">
+                          <div className="flex flex-wrap border-b-2 my-2">
+                            <h1 className="flex-auto text-base font-semibold ">
+                              Total a pagar
+                            </h1>
+                            <div className="text-xl font-semibold text-gray-500 ">
+                              ${amount}
+                            </div>
+
+                          </div>
+
+                          <button type="button" className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                            Realizar Pago
+                          </button>
+                          <div className='w-full flex justify-center mt-2'>
+                            <Link to={'/cart'} className='font-semibold hover:text-blue-700' >Ver carrito</Link>
+                          </div>
+
+                        </div> :
+                        <div className="p-4 bg-gray-50 w-full ">
+                          <Link to={'/shop'} type="button" className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                            Ver Catalogo
+                          </Link>
+
+
                         </div>
-
-                      </div>
-
-                      <button type="button" className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                        Realizar Pago
-                      </button>
-                      <div className='w-full flex justify-center mt-2'>
-                        <Link to={'/cart'} className='font-semibold hover:text-blue-700' >Ver carrito</Link>
-                      </div>
-
-                    </div>
-
+                    }
 
                   </div>
-
-
-
                 </Popover.Panel>
               </Transition>
             </>
@@ -226,5 +224,7 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-  logout
+  logout, remove_item, get_items,
+  get_total,
+  get_item_total
 })(Dropauth)

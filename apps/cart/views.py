@@ -64,9 +64,30 @@ class AddItemView(APIView):
             cart = Cart.objects.get(user=user)
 
             if CartItem.objects.filter(cart=cart, product=product).exists():
-                return Response(
-                    {'error': 'Item is already in cart'},
-                    status=status.HTTP_409_CONFLICT)
+                
+                if int(product.quantity) > 0:
+                    cart_itemup = CartItem.objects.filter(product=product,cart=cart)
+                   
+                    cart_itemup.update(count=cart_itemup[0].count+1)
+
+                    cart_items = CartItem.objects.order_by(
+                        'product').filter(cart=cart)
+
+                    result = []
+
+                    for cart_item in cart_items:
+
+                        item = {}
+                        item['id'] = cart_item.id
+                        item['count'] = cart_item.count
+                        product = Product.objects.get(id=cart_item.product.id)
+                        product = ProductSerializer(product,context={"request": request})
+
+                        item['product'] = product.data
+
+                        result.append(item)
+
+                    return Response({'cart': result}, status=status.HTTP_200_OK)
 
             if int(product.quantity) > 0:
                 CartItem.objects.create(

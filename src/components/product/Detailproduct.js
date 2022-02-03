@@ -1,15 +1,16 @@
 import { ShoppingCartIcon, HeartIcon } from '@heroicons/react/outline'
 import { Link } from 'react-router-dom'
+import Loader, { Oval } from "react-loader-spinner";
 
 import Sizes from './detail/Sizes'
 
 export default function ProductDetail({
-    product, catProduct, colors,addToCart
+    product, catProduct, colors, addToCart, loading
 }) {
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">
-            <div className="container px-5 py-24 mx-auto">
+            <div className="container px-5 py-8 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
                     <img alt={product.title} className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={product.photo_url} />
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -66,10 +67,18 @@ export default function ProductDetail({
                         </div>
                         <div className="flex">
                             <span className="title-font font-medium text-2xl text-gray-900">${product.price}</span>
+                            {loading ? <button
+                                className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
+                                <Oval
+                                    type="Oval"
+                                    color="#fff"
+                                    width={20}
+                                    height={20} />
+                            </button> :
+                                <button onClick={addToCart} className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
+                                    <ShoppingCartIcon className='w-6 h-6' />
+                                </button>}
 
-                            <button onClick={addToCart} className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
-                                <ShoppingCartIcon className='w-6 h-6' />
-                            </button>
                             <button className=" rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                                 <HeartIcon className='w-6 h-6' />
                             </button>

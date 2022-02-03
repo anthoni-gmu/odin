@@ -42,7 +42,7 @@ export const add_item = product => async dispatch => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/cart/add-item`, body, config);
 
-            if (res.status === 201) {
+            if (res.status === 201 ||res.status === 200  ) {
                 dispatch({
                     type: ADD_ITEM_OK,
                     payload: res.data

@@ -1,31 +1,21 @@
 import Layaut from '../../layout/Layout'
-import { useEffect } from "react";
-import { Link } from "react-router-dom"
-import { useNavigate } from 'react-router-dom';
 
-import { get_product } from "../../redux/actions/product"
-
+import { useEffect, useState } from "react";
 import { connect } from "react-redux"
 import { useParams } from 'react-router'
 
-import Detailproduct from '../../components/product/Detailproduct'
-
-import ListProducts from '../../components/product/ListProduct';
-
 import { get_categories } from '../../redux/actions/categories'
-
-import ProductCard from '../../components/product/ProductCart';
-import { useState } from "react";
-import { Navigate } from "react-router";
-
-import ModalCart from '../../components/cart/ModalCart';
-
+import { get_product } from "../../redux/actions/product"
 import {
     get_items,
     add_item,
     get_total,
-    get_item_total
+    get_item_total,
 } from "../../redux/actions/cart";
+
+import Detailproduct from '../../components/product/Detailproduct'
+import ListProducts from '../../components/product/ListProduct';
+import ModalCart from '../../components/cart/ModalCart';
 
 const ProductDetail = ({
     get_product,
@@ -42,32 +32,27 @@ const ProductDetail = ({
     totalItems
 }) => {
 
-    let [isOpen, setIsOpen] = useState(true)
-
+    //modal
+    let [isOpen, setIsOpen] = useState(false)
     function closeModal() {
         setIsOpen(false)
     }
-
     function openModal() {
         setIsOpen(true)
     }
 
+    //loader
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
-
+    // get id product
     const params = useParams()
     const productId = params.productId
-    var catProduct = {}
-
-
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        get_product(productId)
-    }, [])
+    let catProduct = {}
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        get_product(productId)
+
         get_categories()
         get_product(productId);
     }, [productId]);
@@ -81,15 +66,11 @@ const ProductDetail = ({
             await get_item_total();
             setLoading(false)
             openModal()
-
-
         }
     }
 
-
-
     if (product !== null && product !== undefined) {
-        var id = product.category
+        let id = product.category
 
         Object.entries(categories).forEach(([key, value]) => {
             if (id === value.id) {
@@ -99,17 +80,16 @@ const ProductDetail = ({
 
     }
 
-
     const showProduct = () => {
 
         return (
-            <Detailproduct addToCart={addToCart} catProduct={catProduct} product={product} colors={products_colors} />
+            <Detailproduct loading={loading} addToCart={addToCart} catProduct={catProduct} product={product} colors={products_colors} />
         )
     }
 
     const showRelatedProducts = () => {
         return (
-            <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="max-w-2xl mx-auto px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">Productos Relacionados</h2>
 
                 <ListProducts data={related_products} />
@@ -120,22 +100,24 @@ const ProductDetail = ({
 
     }
 
-
-
     return (
         <Layaut>
             {product && products_colors !== undefined && showProduct()}
 
             {related_products && showRelatedProducts()}
-            {product && amount && totalItems && <ModalCart closeModal={closeModal} isOpen={isOpen} product={product} amount={amount}
-                totalItems={totalItems} />}
+
+            {product && amount && totalItems && <ModalCart
+                closeModal={closeModal}
+                isOpen={isOpen}
+                product={product}
+                amount={amount}
+                totalItems={totalItems}
+            />}
 
 
         </Layaut>
     );
 };
-
-
 
 const mapStateToProps = state => ({
     product: state.Product.product,
@@ -145,10 +127,7 @@ const mapStateToProps = state => ({
     isAuthenticated: state.Auth.isAuthenticated,
     amount: state.Cart.amount,
     totalItems: state.Cart.total_items
-
-
 })
-
 
 export default connect(mapStateToProps, {
     get_product,
@@ -158,4 +137,3 @@ export default connect(mapStateToProps, {
     get_total,
     get_item_total
 })(ProductDetail)
-
