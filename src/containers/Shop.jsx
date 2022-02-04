@@ -5,12 +5,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import { connect } from 'react-redux'
 import { get_categories } from '../redux/actions/categories'
 import { get_colors } from '../redux/actions/colors'
-import { get_products, get_filtered_products, get_pages_products, get_pages_filters } from '../redux/actions/product'
+import { get_products, get_filtered_products, get_pages_products } from '../redux/actions/product'
 import ProductCard from '../components/product/ProductCart'
 import { prices } from '../helpers/fixedPrices'
 import FilterMovil from '../components/shop/FiltersMovil'
 import Filter from '../components/shop/Filters'
-
+import Alert from '../components/Alert'
 
 const Shop = ({
   get_categories,
@@ -207,6 +207,8 @@ const Shop = ({
           </main>
         </div>
       </div>
+      <Alert />
+
     </Layout>
   )
 }

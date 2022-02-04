@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import os
 from apps.cart.models import Cart
+from apps.account.models import UserProfile
 
 class UserAccountManager(BaseUserManager):
     def create_user(self,email,password=None,**extra_fields):
@@ -17,6 +18,10 @@ class UserAccountManager(BaseUserManager):
 
         shopping_cart = Cart.objects.create(user=user)
         shopping_cart.save()
+
+        profile = UserProfile.objects.create(user=user)
+        profile.save()
+        
 
         return user
     def create_superuser(self,email,password,**extra_fields):

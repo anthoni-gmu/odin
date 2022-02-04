@@ -29,7 +29,8 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
-    'apps.user'
+    'apps.user',
+    'apps.account'
 ]
 
 ECOMMERCE_APPS = [

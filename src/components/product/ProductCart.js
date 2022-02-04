@@ -2,7 +2,6 @@ import { Link } from "react-router-dom"
 import { ShoppingCartIcon, HeartIcon } from '@heroicons/react/outline'
 import { useState } from "react";
 import { connect } from "react-redux"
-
 import {
     get_items,
     add_item,
@@ -12,11 +11,19 @@ import {
 
 import ModalCart from '../../components/cart/ModalCart';
 import { Oval } from "react-loader-spinner";
+import { setAlert } from '../../redux/actions/alert';
 
 
-const ProductCard = ({ product, amount, totalItems, add_item, get_items,
+const ProductCard = ({
+    product,
+    amount,
+    totalItems,
+    add_item,
+    get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    items,
+    setAlert
 
 }) => {
     const [loading, setLoading] = useState(false);
@@ -34,21 +41,26 @@ const ProductCard = ({ product, amount, totalItems, add_item, get_items,
             setLoading(true)
 
 
-            try {
-                let av = await add_item(product);
-                await get_items();
-                await get_total();
-                await get_item_total();
-               console.log(av)
+            const MoreThatOne = items.find(element => element.product.id === product.id);
 
-        
-            } catch (err) {
-            }
+            await add_item(product);
+            await get_items();
+            await get_total();
+            await get_item_total();
 
-           
+            MoreThatOne === undefined ?
+                openModal() :
+                product.quantity !== 1 ?
+                    MoreThatOne.count - product.quantity === 0 ?
+                        setAlert('No hay stock', 'red') :
+                        setAlert('Producto actualizado', 'green') :
+                    MoreThatOne.count - product.quantity !== 0 ?
+                        setAlert('Producto actualizado', 'green') :
+                        setAlert('No hay stock', 'red')
+
             setLoading(false)
-            openModal()
-            console.log(product)
+            
+
         }
     }
 
@@ -103,15 +115,16 @@ const ProductCard = ({ product, amount, totalItems, add_item, get_items,
     )
 }
 const mapStateToProps = state => ({
-
+    items: state.Cart.items,
     amount: state.Cart.amount,
     totalItems: state.Cart.total_items
+  
 })
 
 export default connect(mapStateToProps, {
-
     get_items,
     add_item,
     get_total,
-    get_item_total
+    get_item_total,
+    setAlert
 })(ProductCard)

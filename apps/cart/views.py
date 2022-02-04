@@ -26,7 +26,8 @@ class GetItemsView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product,context={"request": request})
+                    product = ProductSerializer(
+                        product, context={"request": request})
 
                     item['product'] = product.data
 
@@ -64,10 +65,16 @@ class AddItemView(APIView):
             cart = Cart.objects.get(user=user)
 
             if CartItem.objects.filter(cart=cart, product=product).exists():
-                
+
                 if int(product.quantity) > 0:
-                    cart_itemup = CartItem.objects.filter(product=product,cart=cart)
-                   
+                    cart_itemup = CartItem.objects.filter(
+                        product=product, cart=cart)
+
+                    if (cart_itemup[0].count-product.quantity == 0):
+                        return Response(
+                            {'error': 'Not enough of this item in stock'},
+                            status=status.HTTP_423_LOCKED)
+
                     cart_itemup.update(count=cart_itemup[0].count+1)
 
                     cart_items = CartItem.objects.order_by(
@@ -81,7 +88,8 @@ class AddItemView(APIView):
                         item['id'] = cart_item.id
                         item['count'] = cart_item.count
                         product = Product.objects.get(id=cart_item.product.id)
-                        product = ProductSerializer(product,context={"request": request})
+                        product = ProductSerializer(
+                            product, context={"request": request})
 
                         item['product'] = product.data
 
@@ -111,7 +119,8 @@ class AddItemView(APIView):
                         item['id'] = cart_item.id
                         item['count'] = cart_item.count
                         product = Product.objects.get(id=cart_item.product.id)
-                        product = ProductSerializer(product,context={"request": request})
+                        product = ProductSerializer(
+                            product, context={"request": request})
 
                         item['product'] = product.data
 
@@ -171,12 +180,12 @@ class GetItemTotalView(APIView):
 
 
 class UpdateItemView(APIView):
-    def put(self,request,format=None):
-        user=self.request.user
-        data=self.request.data
+    def put(self, request, format=None):
+        user = self.request.user
+        data = self.request.data
 
         try:
-            product_id= int(data['product_id'])
+            product_id = int(data['product_id'])
         except:
             return Response(
                 {'error': 'Product ID must be an integer'},
@@ -194,7 +203,7 @@ class UpdateItemView(APIView):
                 return Response(
                     {'error': 'This product does not exist'},
                     status=status.HTTP_404_NOT_FOUND)
-            
+
             product = Product.objects.get(id=product_id)
             cart = Cart.objects.get(user=user)
 
@@ -202,7 +211,7 @@ class UpdateItemView(APIView):
                 return Response(
                     {'error': 'This product is not in your cart'},
                     status=status.HTTP_404_NOT_FOUND)
-            
+
             quantity = product.quantity
 
             if count <= quantity:
@@ -221,7 +230,8 @@ class UpdateItemView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product,context={"request": request})
+                    product = ProductSerializer(
+                        product, context={"request": request})
 
                     item['product'] = product.data
 
@@ -249,13 +259,13 @@ class RemoveItemView(APIView):
             return Response(
                 {'error': 'Product ID must be an integer'},
                 status=status.HTTP_404_NOT_FOUND)
-        
+
         try:
             if not Product.objects.filter(id=product_id).exists():
                 return Response(
                     {'error': 'This product does not exist'},
                     status=status.HTTP_404_NOT_FOUND)
-            
+
             product = Product.objects.get(id=product_id)
             cart = Cart.objects.get(user=user)
 
@@ -263,7 +273,7 @@ class RemoveItemView(APIView):
                 return Response(
                     {'error': 'This product is not in your cart'},
                     status=status.HTTP_404_NOT_FOUND)
-            
+
             CartItem.objects.filter(cart=cart, product=product).delete()
 
             if not CartItem.objects.filter(cart=cart, product=product).exists():
@@ -282,7 +292,8 @@ class RemoveItemView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product,context={"request": request})
+                    product = ProductSerializer(
+                        product, context={"request": request})
 
                     item['product'] = product.data
 
@@ -293,6 +304,7 @@ class RemoveItemView(APIView):
             return Response(
                 {'error': 'Something went wrong when removing item'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class EmptyCartView(APIView):
     def delete(self, request, format=None):
@@ -318,7 +330,6 @@ class EmptyCartView(APIView):
             return Response(
                 {'error': 'Something went wrong emptying cart'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 
 class SynchCartView(APIView):
@@ -357,14 +368,14 @@ class SynchCartView(APIView):
                     except:
                         cart_item_count = 1
 
-                    #Chqueo con base de datos
+                    # Chqueo con base de datos
                     if (cart_item_count + int(count)) <= int(quantity):
                         updated_count = cart_item_count + int(count)
                         CartItem.objects.filter(
                             cart=cart, product=product
                         ).update(count=updated_count)
                 else:
-                    #Agregar el item al carrito del usuario
+                    # Agregar el item al carrito del usuario
                     try:
                         cart_item_count = int(cart_item['count'])
                     except:
@@ -376,15 +387,15 @@ class SynchCartView(APIView):
                         )
 
                         if CartItem.objects.filter(cart=cart, product=product).exists():
-                            #Sumar item
+                            # Sumar item
                             total_items = int(cart.total_items) + 1
                             Cart.objects.filter(user=user).update(
                                 total_items=total_items
                             )
 
                 return Response(
-                {'success': 'Cart Synchronized'},
-                status=status.HTTP_201_CREATED)
+                    {'success': 'Cart Synchronized'},
+                    status=status.HTTP_201_CREATED)
         except:
             return Response(
                 {'error': 'Something went wrong when synching cart'},

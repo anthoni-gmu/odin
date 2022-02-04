@@ -16,8 +16,11 @@ import {
 import Detailproduct from '../../components/product/Detailproduct'
 import ListProducts from '../../components/product/ListProduct';
 import ModalCart from '../../components/cart/ModalCart';
+import { setAlert } from '../../redux/actions/alert';
+import Alert from '../../components/Alert';
 
 const ProductDetail = ({
+    items,
     get_product,
     product,
     related_products,
@@ -29,7 +32,8 @@ const ProductDetail = ({
     get_total,
     get_item_total,
     amount,
-    totalItems
+    totalItems,
+    setAlert
 }) => {
 
     //modal
@@ -59,14 +63,31 @@ const ProductDetail = ({
 
     const addToCart = async () => {
         if (product && product !== null && product !== undefined && product.quantity > 0) {
+
+
             setLoading(true)
+
+            const MoreThatOne = items.find(element => element.product.id === product.id);
             await add_item(product);
+
+
             await get_items();
             await get_total();
             await get_item_total();
             setLoading(false)
-            openModal()
+
+            MoreThatOne === undefined ?
+                openModal() :
+                product.quantity !== 1 ?
+                    MoreThatOne.count - product.quantity === 0 ?
+                        setAlert('No hay stock', 'red') :
+                        setAlert('Producto actualizado', 'green') :
+                    MoreThatOne.count - product.quantity !== 0 ?
+                        setAlert('Producto actualizado', 'green') :
+                        setAlert('No hay stock', 'red')
         }
+
+
     }
 
     if (product !== null && product !== undefined) {
@@ -113,6 +134,7 @@ const ProductDetail = ({
                 amount={amount}
                 totalItems={totalItems}
             />}
+            <Alert />
 
 
         </Layaut>
@@ -126,7 +148,8 @@ const mapStateToProps = state => ({
     categories: state.Categories.categories,
     isAuthenticated: state.Auth.isAuthenticated,
     amount: state.Cart.amount,
-    totalItems: state.Cart.total_items
+    totalItems: state.Cart.total_items,
+    items: state.Cart.items
 })
 
 export default connect(mapStateToProps, {
@@ -135,5 +158,6 @@ export default connect(mapStateToProps, {
     get_items,
     add_item,
     get_total,
-    get_item_total
+    get_item_total,
+    setAlert
 })(ProductDetail)
