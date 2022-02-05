@@ -24,7 +24,7 @@ const navigation = [
   { name: 'Quienes somos?', to: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
+  { name: 'Panel de Control', href: '#' },
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
