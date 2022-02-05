@@ -15,6 +15,8 @@ import ResetPasswordConfirm from './containers/auth/ResetPasswordConfirm';
 import Product from "./containers/product/Product";
 import Shop from "./containers/Shop";
 import Cart from "./containers/cart/Cart";
+import Profile from "./containers/account/Profile";
+import InfoProfile from "./containers/account/InfoProfile";
 
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
 
 
           <Route exact path='/cart' element={<Cart/>}/>
+          <Route exact path='/profile' element={<Profile/>}/>
+          <Route exact path='/profile/info' element={<InfoProfile/>}/>
 
         </Routes>
       </Router>

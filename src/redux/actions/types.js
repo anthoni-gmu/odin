@@ -106,3 +106,11 @@ export const EMPTY_CART_FAIL = 'EMPTY_CART_FAIL';
 
 export const SYNCH_CART_OK = 'SYNCH_CART_OK';
 export const SYNCH_CART_FAIL = 'SYNCH_CART_FAIL';
+
+
+// Accounts
+export const GET_ACCOUNT_OK = 'GET_ACCOUNT_OK';
+export const GET_ACCOUNT_FAIL = 'GET_ACCOUNT_FAIL';
+
+export const UPDATE_ACCOUNT_OK = 'UPDATE_ACCOUNT_OK';
+export const UPDATE_ACCOUNT_FAIL = 'UPDATE_ACCOUNT_FAIL';

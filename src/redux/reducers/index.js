@@ -7,6 +7,7 @@ import Categories from './categories';
 import Colors from './colors';
 import Sizes from './sizes';
 import Cart from './cart';
+import Account from "./account";
 
 
 
@@ -17,5 +18,6 @@ export default combineReducers({
     Categories,
     Colors,
     Sizes,
-    Cart
+    Cart,
+    Account
 })
