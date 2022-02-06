@@ -36,7 +36,9 @@ PROJECT_APPS = [
 ECOMMERCE_APPS = [
     'apps.product',
     'apps.category',
-    'apps.cart'
+    'apps.cart',
+    'apps.wishlist',
+
 ]
 THIRD_PARTY_APPS = [
     'corsheaders',
