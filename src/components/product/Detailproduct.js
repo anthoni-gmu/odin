@@ -3,9 +3,16 @@ import { Link } from 'react-router-dom'
 import Loader, { Oval } from "react-loader-spinner";
 
 import Sizes from './detail/Sizes'
+import WishlistHeart from '../wishlist/WishlistHeart';
 
 export default function ProductDetail({
-     product, catProduct, colors, addToCart, loading
+    wishlist,
+    addToWishlist,
+    product,
+    catProduct,
+    colors,
+    addToCart,
+    loading
 }) {
 
     return (
@@ -68,23 +75,27 @@ export default function ProductDetail({
                         <div className="flex">
                             <span className="title-font font-medium text-2xl text-gray-900">${product.price}</span>
                             {
-                                loading ? <button
-                                className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
-                                <Oval
-                                    type="Oval"
-                                    color="#fff"
-                                    width={20}
-                                    height={20} />
-                            </button> : 
+                                loading ?
+                                    <button
+                                        className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
+                                        <Oval
+                                            type="Oval"
+                                            color="#fff"
+                                            width={20}
+                                            height={20}
 
-                            
-                                <button onClick={addToCart} className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
-                                    <ShoppingCartIcon className='w-6 h-6' />
-                                </button>}
+                                        />
+                                    </button> :
+                                    <button onClick={addToCart} className="flex ml-auto text-white bg-slate-700 border-0 w-10 h-10 items-center justify-center focus:outline-none hover:bg-slate-500 rounded-full">
+                                        <ShoppingCartIcon className='w-6 h-6' />
+                                    </button>
+                            }
 
-                            <button className=" rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                                <HeartIcon className='w-6 h-6' />
-                            </button>
+                            <WishlistHeart
+                                product={product}
+                                wishlist={wishlist}
+                                addToWishlist={addToWishlist}
+                            />
 
                         </div>
                     </div>

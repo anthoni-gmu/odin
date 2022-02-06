@@ -1,6 +1,6 @@
 import { Menu, Transition, Popover } from '@headlessui/react'
 import { Fragment, useEffect,  useState } from 'react'
-import { BellIcon, ShoppingCartIcon, ChevronDownIcon  } from '@heroicons/react/solid'
+import {  ShoppingCartIcon, ChevronDownIcon  } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'

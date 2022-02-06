@@ -9,7 +9,13 @@ class WishList(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     total_items = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.user
+
 
 class WishListItem(models.Model):
     wishlist = models.ForeignKey(WishList, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.product

@@ -9,15 +9,15 @@ import Error404 from './containers/errors/Error404';
 import Signup from "./containers/auth/Signup";
 import Login from "./containers/auth/Login";
 import Activate from './containers/auth/Activate';
-import ResetPassword from './containers/auth/ResetPassword';
-import ResetPasswordConfirm from './containers/auth/ResetPasswordConfirm';
+// import ResetPassword from './containers/auth/ResetPassword';
+// import ResetPasswordConfirm from './containers/auth/ResetPasswordConfirm';
 
 import Product from "./containers/product/Product";
 import Shop from "./containers/Shop";
 import Cart from "./containers/cart/Cart";
 import Profile from "./containers/account/Profile";
 import InfoProfile from "./containers/account/InfoProfile";
-
+import Wishlist from "./containers/account/Wishlist"; 
 
 function App() {
   return (
@@ -40,6 +40,7 @@ function App() {
           <Route exact path='/cart' element={<Cart/>}/>
           <Route exact path='/profile' element={<Profile/>}/>
           <Route exact path='/profile/info' element={<InfoProfile/>}/>
+          <Route exact path='/profile/wishlist' element={<Wishlist/>}/>
 
         </Routes>
       </Router>

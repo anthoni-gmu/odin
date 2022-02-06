@@ -22,7 +22,6 @@ import DropAuth from "../components/auth/dropAuth";
 
 
 
-
 const Layaut = (props) => {
 
     const [sidebarOpen, setSidebarOpen] = useState(false)

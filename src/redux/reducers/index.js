@@ -8,6 +8,7 @@ import Colors from './colors';
 import Sizes from './sizes';
 import Cart from './cart';
 import Account from "./account";
+import Wishlist from "./wishlist";
 
 
 
@@ -19,5 +20,6 @@ export default combineReducers({
     Colors,
     Sizes,
     Cart,
-    Account
+    Account,
+    Wishlist
 })

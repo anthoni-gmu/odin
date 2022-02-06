@@ -13,11 +13,19 @@ import {
     get_item_total,
 } from "../../redux/actions/cart";
 
+import {
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item
+} from '../../redux/actions/wishlist';
+
 import Detailproduct from '../../components/product/Detailproduct'
 import ListProducts from '../../components/product/ListProduct';
 import ModalCart from '../../components/cart/ModalCart';
 import { setAlert } from '../../redux/actions/alert';
 import Alert from '../../components/Alert';
+import { Navigate } from "react-router";
 
 const ProductDetail = ({
     items,
@@ -33,7 +41,14 @@ const ProductDetail = ({
     get_item_total,
     amount,
     totalItems,
-    setAlert
+    setAlert,
+    isAuthenticated,
+    wishlist,
+
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item
 }) => {
 
     //modal
@@ -44,7 +59,6 @@ const ProductDetail = ({
     function openModal() {
         setIsOpen(true)
     }
-
     //loader
     const [loading, setLoading] = useState(false);
 
@@ -58,7 +72,9 @@ const ProductDetail = ({
         get_product(productId)
 
         get_categories()
-        get_product(productId);
+        get_wishlist_items()
+        get_wishlist_item_total()
+
     }, [productId]);
 
     const addToCart = async () => {
@@ -90,6 +106,50 @@ const ProductDetail = ({
 
     }
 
+
+    const addToWishlist = async () => {
+        if (isAuthenticated) {
+            let isPresent = false;
+            if (
+                wishlist &&
+                wishlist !== null &&
+                wishlist !== undefined &&
+                product &&
+                product !== null &&
+                product !== undefined
+            ) {
+                wishlist.map(item => {
+                    if (item.product.id.toString() === product.id.toString()) {
+                        console.log(item.product.id.toString(), product.id.toString())
+                        isPresent = true;
+                    }
+                });
+            }
+
+            if (isPresent) {
+                await remove_wishlist_item(product.id);
+                await get_wishlist_items();
+                await get_wishlist_item_total();
+                setAlert('Se elimino el producto de la lista de deseos', 'green')
+            } else {
+                await remove_wishlist_item(product.id);
+                await add_wishlist_item(product.id);
+                await get_wishlist_items();
+                await get_wishlist_item_total();
+                await get_items();
+                await get_total();
+                await get_item_total();
+                setAlert('Se agrego el producto a la lista de deseos', 'green')
+
+            }
+
+        } else {
+            return <Navigate to="/cart" />
+        }
+    };
+
+
+
     if (product !== null && product !== undefined) {
         let id = product.category
 
@@ -104,7 +164,14 @@ const ProductDetail = ({
     const showProduct = () => {
 
         return (
-            <Detailproduct loading={loading} addToCart={addToCart} catProduct={catProduct} product={product} colors={products_colors} />
+            <Detailproduct
+                wishlist={wishlist}
+                addToWishlist={addToWishlist}
+                loading={loading}
+                addToCart={addToCart}
+                catProduct={catProduct}
+                product={product}
+                colors={products_colors} />
         )
     }
 
@@ -149,7 +216,8 @@ const mapStateToProps = state => ({
     isAuthenticated: state.Auth.isAuthenticated,
     amount: state.Cart.amount,
     totalItems: state.Cart.total_items,
-    items: state.Cart.items
+    items: state.Cart.items,
+    wishlist: state.Wishlist.items
 })
 
 export default connect(mapStateToProps, {
@@ -159,5 +227,9 @@ export default connect(mapStateToProps, {
     add_item,
     get_total,
     get_item_total,
-    setAlert
+    setAlert,
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item
 })(ProductDetail)

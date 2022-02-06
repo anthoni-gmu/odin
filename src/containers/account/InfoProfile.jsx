@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import LayaoutDashboard from '../../layout/LayaoutDashboard'

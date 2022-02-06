@@ -64,8 +64,8 @@ const Sidebar = ({
                             Mis Compras</Link>
                     </li>
                     <li>
-                        <Link to={'/'} className="flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200 " >
-                            <HeartIcon className="h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200" />
+                        <Link to={'../profile/wishlist'} className={window.location.pathname === '/profile/wishlist' ? select : noSelect} >
+                            <HeartIcon className={window.location.pathname === '/profile/wishlist' ? selectIcon : noSelectIcon} />
                             Lista de Deseos</Link>
                     </li>
                     <li>
@@ -91,7 +91,7 @@ const Sidebar = ({
                     </li>
                 </ul>
             </div>
-            <button  onClick={logoutHandler} className="flex mt-20 space-x-4 items-center  ">
+            <button onClick={logoutHandler} className="flex mt-20 space-x-4 items-center  ">
                 <div className="flex space-x-3 font-semibold text-gray-900 transition duration-200 hover:text-red-600">
                     <LogoutIcon className="h-6 w-6 hover:text-red-600 text-gray-700 transition duration-200" />
                     <span className="hover:text-red-600">Salir</span>
