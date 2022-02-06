@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import {
     ShoppingBagIcon,
     ArrowCircleLeftIcon,
@@ -10,10 +10,32 @@ import {
     SparklesIcon,
     FireIcon
 } from '@heroicons/react/solid'
+import { useState } from 'react'
+
+import { logout } from '../../redux/actions/auth'
+import { connect } from "react-redux"
+
+const Sidebar = ({
+    logout
+}) => {
+
+    const noSelect = ' flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200'
+    const noSelectIcon = 'h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200 '
+
+    const select = 'flex items-center text-sm font-semibold bg-indigo-400  rounded-md text-gray-100 p-2 '
+    const selectIcon = 'h-6 w-6 mr-4 text-white'
+    const [redirect, setRedirect] = useState(false);
 
 
-export default function Sidebar({
-}) {
+    const logoutHandler = () => {
+        logout();
+        setRedirect(true);
+    };
+    if (redirect) {
+        return <Navigate to='/' />;
+    }
+
+
     return (
         <div className="py-12 px-10 ">
             <div className="flex space-2 items-center border-b-2 pb-4">
@@ -63,18 +85,25 @@ export default function Sidebar({
                             Método de Pago</Link>
                     </li>
                     <li>
-                        <Link to={'../profile/info'} className="flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200 " >
-                            <CogIcon className="h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200" />
+                        <Link to={'../profile/info'} className={window.location.pathname === '/profile/info' ? select : noSelect} >
+                            <CogIcon className={window.location.pathname === '/profile/info' ? selectIcon : noSelectIcon} />
                             Información</Link>
                     </li>
                 </ul>
             </div>
-            <Link to={"/"} className="flex mt-20 space-x-4 items-center  ">
+            <button  onClick={logoutHandler} className="flex mt-20 space-x-4 items-center  ">
                 <div className="flex space-x-3 font-semibold text-gray-900 transition duration-200 hover:text-red-600">
                     <LogoutIcon className="h-6 w-6 hover:text-red-600 text-gray-700 transition duration-200" />
                     <span className="hover:text-red-600">Salir</span>
                 </div>
-            </Link>
+            </button>
         </div>
     )
 }
+
+const mapStateToProps = state => ({
+
+})
+export default connect(mapStateToProps, {
+    logout
+})(Sidebar)

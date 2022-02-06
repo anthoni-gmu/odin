@@ -2,28 +2,25 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { check_authenticated, load_user, refresh } from '../redux/actions/auth';
 
+import {
+    get_items,
+    get_total,
+    get_item_total
+} from "../redux/actions/cart";
 
-import { Fragment, useEffect ,useState} from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import {
 
-} from "../redux/actions/cart";
 import Sidebar from "../components/account/Sidebar";
-import { Dialog, Menu, Transition } from "@headlessui/react";
-import {  MenuAlt2Icon, XIcon } from "@heroicons/react/solid";
+import { Dialog, Transition } from "@headlessui/react";
+import { MenuAlt2Icon, XIcon } from "@heroicons/react/solid";
 
 import { get_account } from "../redux/actions/account";
+import Alert from "../components/Alert";
+import DropAuth from "../components/auth/dropAuth";
 
-const userNavigation = [
-    { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
-]
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 
 const Layaut = (props) => {
@@ -34,6 +31,9 @@ const Layaut = (props) => {
         props.check_authenticated()
         props.load_user()
         props.get_account()
+        props.get_items()
+        props.get_total()
+        props.get_item_total()
     }, []);
 
     return (
@@ -126,58 +126,21 @@ const Layaut = (props) => {
                             <div className="flex-1 flex">
 
                             </div>
-                            <div className="ml-4 flex items-center md:ml-6">
+                            <div className="ml-4 flex items-center w-1/5 md:ml-6">
                                 {/* Profile dropdown */}
-                                <Menu as="div" className="ml-3 relative">
-                                    <div>
-                                        <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            <span className="sr-only">Open user menu</span>
-                                            <img
-                                                className="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
-                                            />
-                                        </Menu.Button>
-                                    </div>
-                                    <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                    >
-                                        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                            {userNavigation.map((item) => (
-                                                <Menu.Item key={item.name}>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href={item.href}
-                                                            className={classNames(
-                                                                active ? 'bg-gray-100' : '',
-                                                                'block px-4 py-2 text-sm text-gray-700'
-                                                            )}
-                                                        >
-                                                            {item.name}
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
-                                            ))}
-                                        </Menu.Items>
-                                    </Transition>
-                                </Menu>
+                                <DropAuth />
                             </div>
                         </div>
                     </div>
 
                     <main className="flex-1">
-                    {props.children}
-                       
+                        {props.children}
+
                     </main>
                 </div>
             </div>
             <ToastContainer autoClose={5000} />
+            <Alert />
 
         </div>
     )
@@ -187,6 +150,9 @@ export default connect(null, {
     check_authenticated,
     load_user,
     refresh,
-    get_account
+    get_account,
+    get_items,
+    get_total,
+    get_item_total,
 
 })(Layaut)
