@@ -15,6 +15,11 @@ export default function ProductDetail({
     loading
 }) {
 
+
+    const Print=()=>{
+        console.log("hola")
+    }
+
     return (
         <section className="text-gray-600 body-font overflow-hidden">
             <div className="container px-5 py-8 mx-auto">
@@ -90,6 +95,8 @@ export default function ProductDetail({
                                         <ShoppingCartIcon className='w-6 h-6' />
                                     </button>
                             }
+
+
 
                             <WishlistHeart
                                 product={product}

@@ -1,6 +1,6 @@
 import { Menu, Transition, Popover } from '@headlessui/react'
-import { Fragment, useEffect,  useState } from 'react'
-import {  ShoppingCartIcon, ChevronDownIcon  } from '@heroicons/react/solid'
+import { Fragment, useEffect, useState } from 'react'
+import { ShoppingCartIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'
@@ -110,8 +110,8 @@ const Dropauth = ({
 
                           <div className="w-full h-full text-center">
                             <div className="flex h-full flex-col justify-between">
-                            
-                            <ShoppingCartIcon className="mt-4 w-16 h-w-16 m-auto text-gray-600" aria-hidden="true" />
+
+                              <ShoppingCartIcon className="mt-4 w-16 h-w-16 m-auto text-gray-600" aria-hidden="true" />
 
 
                               <p className="text-gray-900 text-lg font-medium mt-4">

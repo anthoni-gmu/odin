@@ -27,6 +27,9 @@ class Product(models.Model):
 
     class Meta:
         ordering=('-date_added',)
+
+    def get_category(self):
+        return self.category.name
     
  
 

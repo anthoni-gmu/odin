@@ -27,6 +27,8 @@ import { setAlert } from '../../redux/actions/alert';
 import Alert from '../../components/Alert';
 import { Navigate } from "react-router";
 
+
+
 const ProductDetail = ({
     items,
     get_product,
@@ -76,6 +78,7 @@ const ProductDetail = ({
         get_wishlist_item_total()
 
     }, [productId]);
+
 
     const addToCart = async () => {
         if (product && product !== null && product !== undefined && product.quantity > 0) {

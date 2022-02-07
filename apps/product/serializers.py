@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Product
-from apps.category.models import Size
+from apps.category.models import Size,Category
 
 class ProductSerializer(serializers.ModelSerializer):
     photo_url=serializers.SerializerMethodField()
@@ -23,7 +23,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'photo_url',
             'num_visits',
             'last_visit',
-            'sizes_drop'
+            'sizes_drop',
+            'get_category'
         ]
     
         

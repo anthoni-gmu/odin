@@ -12,6 +12,8 @@ class WishList(models.Model):
     def __str__(self):
         return self.user
 
+        
+
 
 class WishListItem(models.Model):
     wishlist = models.ForeignKey(WishList, on_delete=models.CASCADE)
@@ -19,3 +21,5 @@ class WishListItem(models.Model):
 
     def __str__(self):
         return self.product
+
+    

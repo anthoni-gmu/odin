@@ -1,7 +1,6 @@
 import { HeartIcon } from "@heroicons/react/solid";
 
 const WishlistHeart = ({
-
     addToWishlist,
     product,
     wishlist

@@ -5,15 +5,16 @@ from apps.cart.models import Cart, CartItem
 from .models import WishList, WishListItem
 from apps.product.models import Product
 from apps.product.serializers import ProductSerializer
+from rest_framework.pagination import PageNumberPagination
 
 
 class GetItemsView(APIView):
     def get(self, request, format=None):
         user = self.request.user
-
         try:
             wishlist = WishList.objects.get(user=user)
             wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+
             result = []
 
             if WishListItem.objects.filter(wishlist=wishlist).exists():
@@ -21,7 +22,8 @@ class GetItemsView(APIView):
                     item = {}
                     item['id'] = wishlist_item.id
                     product = Product.objects.get(id=wishlist_item.product.id)
-                    product = ProductSerializer(product ,context={"request": request})
+                    product = ProductSerializer(
+                        product, context={"request": request})
                     item['product'] = product.data
                     result.append(item)
             return Response(
@@ -47,7 +49,7 @@ class AddItemView(APIView):
                 {'error': 'Product ID must be an integer'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+
         try:
             if not Product.objects.filter(id=product_id).exists():
                 return Response(
@@ -75,21 +77,6 @@ class AddItemView(APIView):
                     total_items=total_items
                 )
 
-                cart = Cart.objects.get(user=user)
-            
-                if CartItem.objects.filter(cart=cart, product=product).exists():
-                    CartItem.objects.filter(
-                        cart=cart,
-                        product=product
-                    ).delete()
-
-                    if not CartItem.objects.filter(cart=cart, product=product).exists():
-                        # actualizar items totales ene l carrito
-                        total_items = int(cart.total_items) - 1
-                        Cart.objects.filter(user=user).update(
-                            total_items=total_items
-                        )
-
             wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
             result = []
 
@@ -98,12 +85,13 @@ class AddItemView(APIView):
 
                 item['id'] = wishlist_item.id
                 product = Product.objects.get(id=wishlist_item.product.id)
-                product = ProductSerializer(product,context={"request": request})
+                product = ProductSerializer(
+                    product, context={"request": request})
 
                 item['product'] = product.data
 
                 result.append(item)
-            
+
             return Response(
                 {'wishlist': result},
                 status=status.HTTP_201_CREATED
@@ -172,7 +160,7 @@ class RemoveItemView(APIView):
                 WishList.objects.filter(user=user).update(
                     total_items=total_items
                 )
-            
+
             wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
 
             result = []

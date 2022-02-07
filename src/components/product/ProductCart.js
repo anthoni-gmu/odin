@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { ShoppingCartIcon, HeartIcon } from '@heroicons/react/outline'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux"
 import {
     get_items,
@@ -14,6 +14,17 @@ import { Oval } from "react-loader-spinner";
 import { setAlert } from '../../redux/actions/alert';
 
 
+import {
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item
+} from '../../redux/actions/wishlist';
+
+import WishlistHeart from '../wishlist/WishlistHeart';
+
+
+
 const ProductCard = ({
     product,
     amount,
@@ -23,10 +34,25 @@ const ProductCard = ({
     get_total,
     get_item_total,
     items,
-    setAlert
+    setAlert,
+
+
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item,
+    isAuthenticated,
+    wishlist
 
 }) => {
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        get_wishlist_items()
+        get_wishlist_item_total()
+
+    }, []);
+
 
     let [isOpen, setIsOpen] = useState(false)
     function closeModal() {
@@ -59,10 +85,52 @@ const ProductCard = ({
                         setAlert('No hay stock', 'red')
 
             setLoading(false)
-            
+
 
         }
     }
+
+    const addToWishlist = async () => {
+        if (isAuthenticated) {
+            let isPresent = false;
+            if (
+                wishlist &&
+                wishlist !== null &&
+                wishlist !== undefined &&
+                product &&
+                product !== null &&
+                product !== undefined
+            ) {
+                wishlist.map(item => {
+                    if (item.product.id.toString() === product.id.toString()) {
+                        console.log(item.product.id.toString(), product.id.toString())
+                        isPresent = true;
+                    }
+                });
+            }
+
+            if (isPresent) {
+                await remove_wishlist_item(product.id);
+                await get_wishlist_items();
+                await get_wishlist_item_total();
+                setAlert('Se elimino el producto de la lista de deseos', 'green')
+            } else {
+                await remove_wishlist_item(product.id);
+                await add_wishlist_item(product.id);
+                await get_wishlist_items();
+                await get_wishlist_item_total();
+                await get_items();
+                await get_total();
+                await get_item_total();
+                setAlert('Se agrego el producto a la lista de deseos', 'green')
+
+            }
+
+        } else {
+            return <Navigate to="/cart" />
+        }
+    };
+
 
     return (
         <div key={product.id} className="group relative m-2">
@@ -97,9 +165,11 @@ const ProductCard = ({
                                 <ShoppingCartIcon className='w-6 h-6' />
                             </button>}
 
-                        <button className=" rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                            <HeartIcon className='w-6 h-6' />
-                        </button>
+                            <WishlistHeart
+                                product={product}
+                                wishlist={wishlist}
+                                addToWishlist={addToWishlist}
+                            />
 
                     </div>
                 </div>
@@ -115,10 +185,13 @@ const ProductCard = ({
     )
 }
 const mapStateToProps = state => ({
+    isAuthenticated: state.Auth.isAuthenticated,
     items: state.Cart.items,
     amount: state.Cart.amount,
-    totalItems: state.Cart.total_items
-  
+    totalItems: state.Cart.total_items,
+    wishlist: state.Wishlist.items
+
+
 })
 
 export default connect(mapStateToProps, {
@@ -126,5 +199,9 @@ export default connect(mapStateToProps, {
     add_item,
     get_total,
     get_item_total,
-    setAlert
+    setAlert,
+    add_wishlist_item,
+    get_wishlist_items,
+    get_wishlist_item_total,
+    remove_wishlist_item
 })(ProductCard)

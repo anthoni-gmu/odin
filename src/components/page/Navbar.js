@@ -1,15 +1,12 @@
 import Alert from '../Alert'
 import Dropauth from '../../components/auth/dropAuth'
-import Navcar from '../../components/cart/Navcar'
 import { connect } from 'react-redux'
 import { NavLink, Link, Navigate } from 'react-router-dom'
 import { Fragment, useEffect, useState } from 'react'
-import SearchBox from './SearchBox'
 import {
   get_categories,
 } from '../../redux/actions/categories'
 
-import { SearchIcon } from '@heroicons/react/solid'
 
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
