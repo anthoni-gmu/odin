@@ -127,7 +127,6 @@ class RemoveItemView(APIView):
     def delete(self, request, format=None):
         user = self.request.user
         data = self.request.data
-
         try:
             product_id = int(data['product_id'])
         except:
@@ -143,6 +142,7 @@ class RemoveItemView(APIView):
                     {'error': 'Product with this ID does not exist'},
                     status=status.HTTP_404_NOT_FOUND
                 )
+
             product = Product.objects.get(id=product_id)
             if not WishListItem.objects.filter(wishlist=wishlist, product=product).exists():
                 return Response(
@@ -171,7 +171,8 @@ class RemoveItemView(APIView):
 
                     item['id'] = wishlist_item.id
                     product = Product.objects.get(id=wishlist_item.product.id)
-                    product = ProductSerializer(product)
+                    product = ProductSerializer(
+                        product, context={"request": request})
 
                     item['product'] = product.data
 

@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
 const Wishlist = ({
     get_wishlist_items,
     get_wishlist_item_total,
-    items,
     user,
     isAuthenticated,
     wishlist
@@ -58,7 +57,7 @@ const Wishlist = ({
                     </div>
                     <div className="grid w-full grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
 
-                        {wishlist !== null && wishlist !== undefined ? showWishlist() : <>Vacio</>}
+                        {wishlist !== null && wishlist !== [] && wishlist !== undefined ? showWishlist() : <>Vacio</>}
 
 
                     </div>

@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 import CartItem from '../../components/cart/CartItem';
-import OrdenSummary from '../../components/cart/OrdenSummary';
+import Checkout from '../../components/cart/Checkout';
 
 const Cart = ({
   remove_item,
@@ -67,6 +67,8 @@ const Cart = ({
     get_item_total()
   }, [render])
 
+
+
   return (
     <Layout>
       <div className="bg-white">
@@ -85,7 +87,7 @@ const Cart = ({
             </section>
 
             {/* Order summary */}
-            <OrdenSummary amount={amount} />
+            <Checkout  isAuthenticated={isAuthenticated} amount={amount} />
 
 
           </div>

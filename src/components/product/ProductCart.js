@@ -28,6 +28,7 @@ import WishlistHeart from '../wishlist/WishlistHeart';
 const ProductCard = ({
     product,
     amount,
+
     totalItems,
     add_item,
     get_items,
@@ -67,7 +68,7 @@ const ProductCard = ({
             setLoading(true)
 
 
-            const MoreThatOne = items.find(element => element.product.id === product.id);
+            const MoreThatOne = items && items !== null && items !== undefined && items.find(element => element.product.id === product.id);
 
             await add_item(product);
             await get_items();
@@ -115,13 +116,9 @@ const ProductCard = ({
                 await get_wishlist_item_total();
                 setAlert('Se elimino el producto de la lista de deseos', 'green')
             } else {
-                await remove_wishlist_item(product.id);
                 await add_wishlist_item(product.id);
                 await get_wishlist_items();
                 await get_wishlist_item_total();
-                await get_items();
-                await get_total();
-                await get_item_total();
                 setAlert('Se agrego el producto a la lista de deseos', 'green')
 
             }
@@ -165,11 +162,11 @@ const ProductCard = ({
                                 <ShoppingCartIcon className='w-6 h-6' />
                             </button>}
 
-                            <WishlistHeart
-                                product={product}
-                                wishlist={wishlist}
-                                addToWishlist={addToWishlist}
-                            />
+                        <WishlistHeart
+                            product={product}
+                            wishlist={wishlist}
+                            addToWishlist={addToWishlist}
+                        />
 
                     </div>
                 </div>

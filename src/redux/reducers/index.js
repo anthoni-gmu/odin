@@ -9,6 +9,7 @@ import Sizes from './sizes';
 import Cart from './cart';
 import Account from "./account";
 import Wishlist from "./wishlist";
+import Shipping from "./shipping";
 
 
 
@@ -21,5 +22,6 @@ export default combineReducers({
     Sizes,
     Cart,
     Account,
-    Wishlist
+    Wishlist,
+    Shipping
 })

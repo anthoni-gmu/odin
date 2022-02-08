@@ -2,11 +2,6 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { check_authenticated, load_user, refresh } from '../redux/actions/auth';
 
-import {
-    get_items,
-    get_total,
-    get_item_total
-} from "../redux/actions/cart";
 
 import { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
@@ -30,9 +25,7 @@ const Layaut = (props) => {
         props.check_authenticated()
         props.load_user()
         props.get_account()
-        props.get_items()
-        props.get_total()
-        props.get_item_total()
+    
     }, []);
 
     return (
@@ -150,8 +143,5 @@ export default connect(null, {
     load_user,
     refresh,
     get_account,
-    get_items,
-    get_total,
-    get_item_total,
-
+  
 })(Layaut)
