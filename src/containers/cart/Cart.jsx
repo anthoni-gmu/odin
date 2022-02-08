@@ -9,6 +9,7 @@ import {
   get_total,
   get_item_total
 } from "../../redux/actions/cart";
+import { get_shipping_options } from "../../redux/actions/shipping";
 
 import { useEffect } from "react";
 import { useState } from "react";
@@ -27,6 +28,9 @@ const Cart = ({
   amount,
   total_items,
   setAlert,
+
+  get_shipping_options,
+  shipping
 
 }) => {
   const [render, setRender] = useState(false);
@@ -67,6 +71,10 @@ const Cart = ({
     get_item_total()
   }, [render])
 
+  useEffect(() => {
+    get_shipping_options()
+
+  }, []);
 
 
   return (
@@ -87,7 +95,7 @@ const Cart = ({
             </section>
 
             {/* Order summary */}
-            <Checkout  isAuthenticated={isAuthenticated} amount={amount} />
+            <Checkout shipping={shipping} isAuthenticated={isAuthenticated} amount={amount} />
 
 
           </div>
@@ -101,7 +109,9 @@ const mapStateToProps = state => ({
   isAuthenticated: state.Auth.isAuthenticated,
   items: state.Cart.items,
   amount: state.Cart.amount,
-  total_items: state.Cart.total_items
+  total_items: state.Cart.total_items,
+  shipping: state.Shipping.shipping,
+
 })
 
 export default connect(mapStateToProps, {
@@ -111,4 +121,7 @@ export default connect(mapStateToProps, {
   remove_item,
   update_item,
   setAlert,
+
+  get_shipping_options,
+
 })(Cart)
