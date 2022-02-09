@@ -40,6 +40,8 @@ ECOMMERCE_APPS = [
     'apps.wishlist',
     'apps.shipping',
     'apps.order',
+    'apps.payment',
+    'apps.coupon',
 
 ]
 THIRD_PARTY_APPS = [
@@ -217,6 +219,11 @@ DJOSER = {
     },
 }
 
+
+BT_ENVIRONMENT = os.environ.get('BT_ENVIRONMENT')
+BT_MERCHANT_ID = os.environ.get('BT_MERCHANT_ID')
+BT_PUBLIC_KEY = os.environ.get('BT_PUBLIC_KEY')
+BT_PRIVATE_KEY = os.environ.get('BT_PRIVATE_KEY')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = "user.UserAccount"
