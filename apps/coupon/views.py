@@ -8,11 +8,14 @@ from .serializers import CouponSerializer
 class CheckCouponView(APIView):
     def get(self, request, format=None):
         try:
+            print('couponnn')
             coupon_code = request.query_params.get('coupon_code')
 
             if Coupon.objects.filter(code=coupon_code).exists():
-                coupon = Coupon.objects.get(name=coupon_code)
+                coupon = Coupon.objects.get(code=coupon_code)
                 coupon = CouponSerializer(coupon)
+
+                print(coupon)
 
                 return Response(
                     {'coupon': coupon.data},

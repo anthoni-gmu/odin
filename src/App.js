@@ -18,6 +18,7 @@ import Cart from "./containers/cart/Cart";
 import Profile from "./containers/account/Profile";
 import InfoProfile from "./containers/account/InfoProfile";
 import Wishlist from "./containers/account/Wishlist"; 
+import Checkout from "./containers/checkout/Checkout";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route exact path='/profile' element={<Profile/>}/>
           <Route exact path='/profile/info' element={<InfoProfile/>}/>
           <Route exact path='/profile/wishlist' element={<Wishlist/>}/>
+          <Route exact path='/checkout' element={<Checkout/>}/>
 
         </Routes>
       </Router>
