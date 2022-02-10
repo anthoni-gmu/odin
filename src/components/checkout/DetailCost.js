@@ -1,9 +1,10 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/solid"
+import { Link } from "react-router-dom"
 
 import ShippingCost from '../order/ShippingCost'
+import CouponCost from "./CouponCost"
 
 const DetailCost = ({
-    amount,
     applyCoupon,
     coupon,
     coupon_code,
@@ -11,6 +12,12 @@ const DetailCost = ({
     shipping_id,
     shipping,
     onChange,
+
+    estimated_tax,
+    shipping_cost,
+    total_amount,
+    original_price,
+    total_after_coupon
 }) => {
     return (
         <>
@@ -24,61 +31,54 @@ const DetailCost = ({
                         Order summary
                     </h2>
 
-                   <ShippingCost shipping={shipping} shipping_id={shipping_id} onChange={onChange} />
-                    
+                    <ShippingCost shipping={shipping} shipping_id={shipping_id} onChange={onChange} />
 
-                    <div className="mb-6 pb-6 border-b border-gray-200">
-                        <div className="-mx-2 flex items-end justify-end">
-                            <div className="flex-grow px-2 lg:max-w-xs">
-                                <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Cuopon de Descuento</label>
-                                <div>
-                                    <input
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
-                                        placeholder="XXXXXX"
-                                        type="text"
-                                        onChange={e => onChange(e)}
-                                        value={coupon_code}
-                                        name='coupon_code'
-                                    />
-                                </div>
-                            </div>
-                            <div className="px-2">
-                                <button onClick={applyCoupon} className="block w-full max-w-xs mx-auto border border-transparent bg-gray-400 hover:bg-gray-500 focus:bg-gray-500 text-white rounded-md px-5 py-2 font-semibold">APPLY</button>
-                            </div>
-                        </div>
-                    </div>
+                    <CouponCost onChange={onChange} coupon_code={coupon_code} applyCoupon={applyCoupon} coupon={coupon} />
 
 
-                    <dl className="mt-6 space-y-4">
+
+
+                    <dl className="mt-6 mb-3 space-y-4">
                         <div className="flex items-center justify-between">
                             <dt className="text-sm text-gray-600">Subtotal</dt>
-                            <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                            <dd className="text-sm font-medium text-gray-900">${original_price}</dd>
+                        </div>
+                        <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                            <dt className="text-sm text-gray-600">Subtotal Después del Coupon </dt>
+                            <dd className="text-sm font-medium text-gray-900">${total_after_coupon}</dd>
                         </div>
                         <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                             <dt className="flex items-center text-sm text-gray-600">
-                                <span>Shipping estimate</span>
+                                <span>Costo de Entrega</span>
                                 <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
                                     <span className="sr-only">Learn more about how shipping is calculated</span>
                                     <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
                                 </a>
                             </dt>
-                            <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                            <dd className="text-sm font-medium text-gray-900">${shipping_cost}</dd>
                         </div>
                         <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                             <dt className="flex text-sm text-gray-600">
-                                <span>Tax estimate</span>
+                                <span>IGV</span>
                                 <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
                                     <span className="sr-only">Learn more about how tax is calculated</span>
                                     <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
                                 </a>
                             </dt>
-                            <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                            <dd className="text-sm font-medium text-gray-900">${estimated_tax}</dd>
                         </div>
                         <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                            <dt className="text-base font-medium text-gray-900">Order total</dt>
-                            <dd className="text-base font-medium text-gray-900">${amount.toFixed(2)}</dd>
+                            <dt className="text-base font-medium text-gray-900">Precio Total</dt>
+                            <dd className="text-base font-medium text-gray-900">${total_amount}</dd>
                         </div>
                     </dl>
+                    <div className="mt-10">
+                        <button
+                            className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                        >
+                           PROCESAR PAGO
+                        </button>
+                    </div>
                 </>
 
 

@@ -77,17 +77,17 @@ class GetPaymentTotalView(APIView):
                         status=status.HTTP_200_OK
                     )
                 
+                
                 total_amount = 0.0
-
+                total_after_coupon=0.0
                 for cart_item in cart_items:
                     total_amount += (float(cart_item.product.price)
                                     * float(cart_item.count))
 
 
                 original_price = round(total_amount, 2)
-
                 # Cupones
-                if coupon_code != '':
+                if coupon_code != '' and coupon_code !='default' :
                     #Revisar si cupon de precio fijo es valido
                     if Coupon.objects.filter(code__iexact=coupon_code).exists():
                         price_coupon = Coupon.objects.get(code=coupon_code)
@@ -96,18 +96,18 @@ class GetPaymentTotalView(APIView):
                     if discount_amount < total_amount:
                         total_amount -= discount_amount
                         total_after_coupon = total_amount
-
                     
 
                 #Total despues del cupon 
                 total_after_coupon = round(total_after_coupon, 2)
 
-                # Impuesto estimado
+                # Impuesto
                 estimated_tax = round(total_amount * tax, 2)
 
                 total_amount += (total_amount * tax)
 
                 shipping_cost = 0.0
+
                 # verificar que el envio sea valido
                 if Shipping.objects.filter(id__iexact=shipping_id).exists():
                     # agregar shipping a total amount
@@ -156,6 +156,7 @@ class ProcessPaymentView(APIView):
         country_region = data['country_region']
         telephone_number = data['telephone_number']
 
+
         # revisar si datos de shipping son validos
         if not Shipping.objects.filter(id__iexact=shipping_id).exists():
             return Response(
@@ -195,7 +196,7 @@ class ProcessPaymentView(APIView):
                              * float(cart_item.count))
         
         # Cupones
-        if coupon_code != '':
+        if coupon_code != '' and coupon_code != 'default':
             if Coupon.objects.filter(code__iexact=coupon_code).exists():
                 price_coupon = Coupon.objects.get(
                     code=coupon_code
@@ -282,7 +283,7 @@ class ProcessPaymentView(APIView):
                     OrderItem.objects.create(
                         product=product,
                         order=order,
-                        name=product.name,
+                        name=product.title,
                         price=cart_item.product.price,
                         count=cart_item.count
                     )

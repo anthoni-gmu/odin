@@ -10,10 +10,11 @@ const ShippingCost = ({
     if (shipping && shipping !== null && shipping !== undefined) {
         return (
             <div>
-                <h4 className="text-sm text-gray-500 font-medium">Delivery method</h4>
+                <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Servicio de Entrega</label>
+
                 {
                     shipping.map((shipping_option, index) => (
-                        <div className="mt-6" key={index}>
+                        <div className="mt-2" key={index}>
                             <div className="flex items-center justify-between w-full bg-white rounded-md border-2  p-4 focus:outline-none">
                                 <label className="flex items-center">
                                     <input
@@ -29,6 +30,7 @@ const ShippingCost = ({
                                 </label>
 
                                 <span className="text-gray-600 text-sm">${shipping_option.price}</span>
+
                             </div>
                         </div>
                     ))

@@ -12,6 +12,7 @@ import Wishlist from "./wishlist";
 import Shipping from "./shipping";
 import Orders from "./order";
 import Coupons from "./coupon";
+import Payment from "./payment";
 
 
 
@@ -27,5 +28,6 @@ export default combineReducers({
     Wishlist,
     Shipping,
     Orders,
-    Coupons
+    Coupons,
+    Payment
 })
