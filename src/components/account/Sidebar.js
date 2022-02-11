@@ -19,10 +19,10 @@ const Sidebar = ({
     logout
 }) => {
 
-    const noSelect = ' flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200'
+    const noSelect = ' flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200 p-1'
     const noSelectIcon = 'h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200 '
 
-    const select = 'flex items-center text-sm font-semibold bg-indigo-400  rounded-md text-gray-100 p-2 '
+    const select = 'flex items-center text-sm font-semibold bg-indigo-400  rounded-md text-gray-100  p-1'
     const selectIcon = 'h-6 w-6 mr-4 text-white'
     const [redirect, setRedirect] = useState(false);
 
@@ -57,10 +57,10 @@ const Sidebar = ({
                 </div>
             </Link>
             <div className="mt-8">
-                <ul className="space-y-10">
+                <ul className="space-y-4">
                     <li>
-                        <Link to={'/'} className="flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200">
-                            <FireIcon className="h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200" />
+                        <Link to={'/profile/orders'}  className={window.location.pathname === '/profile/orders' ? select : noSelect}>
+                            <FireIcon  className={window.location.pathname === '/profile/orders' ? selectIcon : noSelectIcon} />
                             Mis Compras</Link>
                     </li>
                     <li>

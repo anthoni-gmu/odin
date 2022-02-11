@@ -1,3 +1,4 @@
+from math import e
 from django.shortcuts import render
 from django.conf import settings
 from rest_framework.views import APIView
@@ -196,13 +197,17 @@ class ProcessPaymentView(APIView):
                              * float(cart_item.count))
         
         # Cupones
+
+        price_coupon=''
+
         if coupon_code != '' and coupon_code != 'default':
             if Coupon.objects.filter(code__iexact=coupon_code).exists():
                 price_coupon = Coupon.objects.get(
                     code=coupon_code
                 )
-                discount_amount = float(price_coupon.value)
 
+                discount_amount = float(price_coupon.value)
+                price_coupon.use
                 if discount_amount < total_amount:
                     total_amount -= discount_amount
             
@@ -230,13 +235,16 @@ class ProcessPaymentView(APIView):
                     }
                 }
             )
-        except:
+        except :
             return Response(
                 {'error': 'Error processing the transaction'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         
+        
         if newTransaction.is_success or newTransaction.transaction:
+            
+
             for cart_item in cart_items:
                 update_product = Product.objects.get(id=cart_item.product.id)
 

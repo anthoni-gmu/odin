@@ -17,7 +17,7 @@ export const list_orders = () => async dispatch => {
         };
 
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders/get-orders`, config);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/order/get-orders`, config);
 
             if (res.status === 200) {
                 dispatch({

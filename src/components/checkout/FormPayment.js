@@ -133,30 +133,31 @@ const FormPayment = ({
                             authorization: clientToken,
                             paypal: {
                                 flow: 'vault'
+
                             }
                         }}
                         onInstance={instance => (data.instance = instance)}
-                        asd
+                        
                     />
-                    <div className="mt-6">
-              {loading?<button
-                className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
-              >
-                <Oval
-                  type='Oval'
-                  color='#fff'
-                  height={20}
-                  widht={20}
-                />
-              </button>:
-              <button
-              type="submit"
-              className="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-green-500"
-            >
-              Place Order
-            </button>}
-            </div></>
-                    
+                        <div className="mt-6">
+                            {loading ? <button
+                                className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                            >
+                                <Oval
+                                    type='Oval'
+                                    color='#fff'
+                                    height={20}
+                                    widht={20}
+                                />
+                            </button> :
+                                <button
+                                    type="submit"
+                                    className="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-green-500"
+                                >
+                                    Place Order
+                                </button>}
+                        </div></>
+
                 }
 
 

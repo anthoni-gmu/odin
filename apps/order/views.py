@@ -22,7 +22,7 @@ class ListOrdersView(APIView):
                 item['address_line_2'] = order.address_line_2
 
                 result.append(item)
-
+            
             return Response(
                 {'orders': result},
                 status=status.HTTP_200_OK

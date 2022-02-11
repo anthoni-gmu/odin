@@ -19,6 +19,8 @@ import Profile from "./containers/account/Profile";
 import InfoProfile from "./containers/account/InfoProfile";
 import Wishlist from "./containers/account/Wishlist"; 
 import Checkout from "./containers/checkout/Checkout";
+import ThankYou from "./containers/pages/ThankYou";
+import MyOrders from "./containers/account/MyOrders";
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
         <Routes>
           {/* Error Display */}
           <Route path="*" element={<Error404 />} />
+          <Route path="/thankyou" element={<ThankYou />} />
 
           <Route exact path='/' element={<Home />} />
 
@@ -42,6 +45,7 @@ function App() {
           <Route exact path='/profile' element={<Profile/>}/>
           <Route exact path='/profile/info' element={<InfoProfile/>}/>
           <Route exact path='/profile/wishlist' element={<Wishlist/>}/>
+          <Route exact path='/profile/orders' element={<MyOrders/>}/>
           <Route exact path='/checkout' element={<Checkout/>}/>
 
         </Routes>

@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/shipping/', include('apps.shipping.urls')),
     path('api/payment/', include('apps.payment.urls')),
     path('api/coupon/', include('apps.coupon.urls')),
-    
+
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
