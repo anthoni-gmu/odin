@@ -7,7 +7,10 @@ import {
 
 const initialState = {
     orders: null,
-    order: null
+    order: null,
+    count: null,
+    next: null,
+    previous: null,
 };
 
 
@@ -18,12 +21,18 @@ export default function Orders(state = initialState, action) {
         case GET_ORDERS_OK:
             return {
                 ...state,
-                orders: payload.orders
+                orders: payload.results,
+                count: payload.count,
+                next: payload.next,
+                previous: payload.previous,
             }
         case GET_ORDERS_FAIL:
             return {
                 ...state,
-                orders: []
+                orders: [],
+                count: null,
+                next: null,
+                previous: null,
             }
         case GET_ORDER_DETAIL_OK:
             return {

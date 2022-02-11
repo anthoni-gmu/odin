@@ -16,9 +16,6 @@ export default function ProductDetail({
 }) {
 
 
-    const Print=()=>{
-        console.log("hola")
-    }
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">

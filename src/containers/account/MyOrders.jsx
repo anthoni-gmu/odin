@@ -1,16 +1,34 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
 import OrderList from '../../components/account/OrderList'
 import LayaoutDashboard from '../../layout/LayaoutDashboard'
 import { list_orders } from '../../redux/actions/order'
-
+import { get_pages_orders } from '../../redux/actions/order'
 
 const MyOrders = ({
     list_orders,
     orders,
     isAuthenticated,
-    user
+    user,
+
+    count,
+    next,
+    previous,
+    get_pages_orders
 }) => {
+
+    const navigationOn = 'bg-white rounded-md  hover:bg-indigo-500  hover:text-white px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform'
+    const navigationOff = 'bg-gray-200 cursor-not-allowed px-4 py-2 mx-1 text-gray-500 capitalize  rounded-md '
+
+    const nextPage = async () => {
+        await get_pages_orders(next)
+    }
+    const previousPage = async () => {
+        await get_pages_orders(previous)
+
+    }
+
     useEffect(() => {
         list_orders()
     }, [])
@@ -73,22 +91,26 @@ const MyOrders = ({
 
                                     </tbody>
                                 </table>
-                                <div
-                                    className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                                    <span className="text-xs xs:text-sm text-gray-900">
-                                        Showing 1 to 4 of 50 Entries
-                                    </span>
-                                    <div className="inline-flex mt-2 xs:mt-0">
-                                        <button
-                                            className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-                                            Prev
-                                        </button>
-                                        &nbsp; &nbsp;
-                                        <button
-                                            className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-                                            Next
-                                        </button>
-                                    </div>
+                                <div className="flex my-2">
+                                    <button className={`${previous !== null ? navigationOn : navigationOff}  `} onClick={e => previousPage(e)} disabled={previous !== null ? false : true} >
+                                        <div className="flex items-center -mx-1">
+                                            <ChevronLeftIcon className="w-6 h-6 mx-1" />
+                                            <span className="mx-1">
+                                                Anterior
+                                            </span>
+                                        </div>
+                                    </button>
+
+
+                                    <button onClick={e => nextPage(e)} className={` ${next !== null ? navigationOn : navigationOff}  `} disabled={next !== null ? false : true}>
+                                        <div className="flex items-center -mx-1">
+                                            <span className="mx-1">
+                                                Siguiente
+                                            </span>
+
+                                            <ChevronRightIcon className="w-6 h-6 mx-1" />
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -104,8 +126,14 @@ const mapStateToProps = state => ({
     isAuthenticated: state.Auth.isAuthenticated,
     user: state.Auth.user,
 
+    count: state.Orders.count,
+    next: state.Orders.next,
+    previous: state.Orders.previous
+
+
 })
 
 export default connect(mapStateToProps, {
-    list_orders
+    list_orders,
+    get_pages_orders
 })(MyOrders)

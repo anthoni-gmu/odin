@@ -64,14 +64,14 @@ const Sidebar = ({
                             Mis Compras</Link>
                     </li>
                     <li>
-                        <Link to={'../profile/wishlist'} className={window.location.pathname === '/profile/wishlist' ? select : noSelect} >
+                        <Link to={'/profile/wishlist'} className={window.location.pathname === '/profile/wishlist' ? select : noSelect} >
                             <HeartIcon className={window.location.pathname === '/profile/wishlist' ? selectIcon : noSelectIcon} />
                             Lista de Deseos</Link>
                     </li>
                     <li>
-                        <Link to={'/'} className="flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200 " >
-                            <ClipboardIcon className="h-6 w-6 mr-4 text-gray-700 hover:text-indigo-600 transition duration-200" />
-                            Estado de Pedido</Link>
+                        <Link to={'/profile/search'} className={window.location.pathname === '/profile/search' ? select : noSelect} >
+                            <ClipboardIcon  className={window.location.pathname === '/profile/search' ? selectIcon : noSelectIcon}/>
+                            Buscar Pedido</Link>
                     </li>
                     <li>
                         <Link to={'/'} className="flex items-center text-sm font-semibold text-gray-900 hover:text-indigo-600 transition duration-200 " >

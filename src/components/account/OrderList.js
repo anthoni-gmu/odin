@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 const OrderList = ({
     orders
 
@@ -53,7 +54,7 @@ const OrderList = ({
 
                         <tr key={index}>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p className="text-gray-900 whitespace-no-wrap">{order.transaction_id}</p>
+                                <Link to={`/profile/${order.transaction_id}`} className="text-gray-900 whitespace-no-wrap hover:text-green-400">{order.transaction_id}</Link>
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <time className="text-gray-900 whitespace-no-wrap" dateTime="2021-03-22">{moment(order.date_issued).format('ll')}</time>

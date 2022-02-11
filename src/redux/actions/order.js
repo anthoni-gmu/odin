@@ -29,13 +29,46 @@ export const list_orders = () => async dispatch => {
                     type: GET_ORDERS_FAIL
                 });
             }
-        } catch(err) {
+        } catch (err) {
             dispatch({
                 type: GET_ORDERS_FAIL
             });
         }
     }
 }
+
+export const get_pages_orders = (url) => async dispatch => {
+
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`
+
+        }
+    };
+
+    try {
+        const res = await axios.get(`${url}`, config);
+
+        if (res.status === 200) {
+            dispatch({
+                type: GET_ORDERS_OK,
+                payload: res.data
+            });
+        } else {
+            dispatch({
+                type: GET_ORDERS_FAIL
+            });
+        }
+
+    } catch (err) {
+        dispatch({
+            type: GET_ORDERS_FAIL
+        });
+    }
+}
+
+
 
 
 export const get_order_detail = transactionId => async dispatch => {
@@ -48,7 +81,7 @@ export const get_order_detail = transactionId => async dispatch => {
         };
 
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders/get-order/${transactionId}`, config);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/order/get-order/${transactionId}`, config);
 
             if (res.status === 200) {
                 dispatch({
@@ -60,7 +93,7 @@ export const get_order_detail = transactionId => async dispatch => {
                     type: GET_ORDER_DETAIL_FAIL
                 });
             }
-        } catch(err) {
+        } catch (err) {
             dispatch({
                 type: GET_ORDER_DETAIL_FAIL
             });

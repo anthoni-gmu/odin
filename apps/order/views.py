@@ -2,31 +2,37 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Order, OrderItem
+from rest_framework.pagination import PageNumberPagination
+from .serializers import OrdersSerializer
+
+class ResponsePagination(PageNumberPagination):
+    page_query_param = 'p'
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
 
 
+
+   
 class ListOrdersView(APIView):
     def get(self, request, format=None):
+        paginator= ResponsePagination()
+
         user = self.request.user
         try:
             orders = Order.objects.order_by('-date_issued').filter(user=user)
-            result = []
 
-            for order in orders:
-                item = {}
-                item['status'] = order.status
-                item['transaction_id'] = order.transaction_id
-                item['amount'] = order.amount
-                item['shipping_price'] = order.shipping_price
-                item['date_issued'] = order.date_issued
-                item['address_line_1'] = order.address_line_1
-                item['address_line_2'] = order.address_line_2
+            orders = paginator.paginate_queryset(orders, request)
 
-                result.append(item)
-            
-            return Response(
-                {'orders': result},
-                status=status.HTTP_200_OK
-            )
+            orders = OrdersSerializer(orders, many=True , context={'request':request})
+
+            if orders:
+                return paginator.get_paginated_response(orders.data)
+            else:
+                return Response(
+                {'error': 'No products to list'},
+                status=status.HTTP_404_NOT_FOUND)
+
         except:
             return Response(
                 {'error': 'Something went wrong when retrieving orders'},

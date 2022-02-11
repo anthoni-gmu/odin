@@ -21,6 +21,8 @@ import Wishlist from "./containers/account/Wishlist";
 import Checkout from "./containers/checkout/Checkout";
 import ThankYou from "./containers/pages/ThankYou";
 import MyOrders from "./containers/account/MyOrders";
+import OrdenDetail from "./containers/account/OrdenDetail";
+import SearchOrden from "./containers/account/SearchOrden";
 
 function App() {
   return (
@@ -46,6 +48,11 @@ function App() {
           <Route exact path='/profile/info' element={<InfoProfile/>}/>
           <Route exact path='/profile/wishlist' element={<Wishlist/>}/>
           <Route exact path='/profile/orders' element={<MyOrders/>}/>
+
+          <Route exact path='/profile/:transactionId' element={<OrdenDetail />}/>
+          <Route exact path='/profile/search' element={<SearchOrden />}/>
+
+
           <Route exact path='/checkout' element={<Checkout/>}/>
 
         </Routes>
