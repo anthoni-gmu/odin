@@ -56,9 +56,9 @@ const MyOrders = ({
                         </div>
                     </div>
                     <div>
-                        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
                             <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                                <table className="min-w-full leading-normal">
+                                <table className="min-w-full leading-normal  border-t-2 border-indigo-400 rounded-lg bg-opacity-5" >
                                     <thead>
                                         <tr>
                                             <th

@@ -40,6 +40,7 @@ export default function Orders(state = initialState, action) {
                 order: payload.order
             }
         case GET_ORDER_DETAIL_FAIL:
+            
             return {
                 ...state,
                 order: {}

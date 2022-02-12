@@ -5,6 +5,7 @@ from .models import Order, OrderItem
 from rest_framework.pagination import PageNumberPagination
 from .serializers import OrdersSerializer
 
+
 class ResponsePagination(PageNumberPagination):
     page_query_param = 'p'
     page_size = 10
@@ -12,11 +13,9 @@ class ResponsePagination(PageNumberPagination):
     max_page_size = 10
 
 
-
-   
 class ListOrdersView(APIView):
     def get(self, request, format=None):
-        paginator= ResponsePagination()
+        paginator = ResponsePagination()
 
         user = self.request.user
         try:
@@ -24,14 +23,15 @@ class ListOrdersView(APIView):
 
             orders = paginator.paginate_queryset(orders, request)
 
-            orders = OrdersSerializer(orders, many=True , context={'request':request})
+            orders = OrdersSerializer(
+                orders, many=True, context={'request': request})
 
             if orders:
                 return paginator.get_paginated_response(orders.data)
             else:
                 return Response(
-                {'error': 'No products to list'},
-                status=status.HTTP_404_NOT_FOUND)
+                    {'error': 'No products to list'},
+                    status=status.HTTP_404_NOT_FOUND)
 
         except:
             return Response(
@@ -71,11 +71,12 @@ class ListOrderDetailView(APIView):
 
                 for order_item in order_items:
                     sub_item = {}
-
                     sub_item['name'] = order_item.name
                     sub_item['price'] = order_item.price
                     sub_item['count'] = order_item.count
-
+                    image = order_item.product.photo.url
+                    image = request.build_absolute_uri(image)
+                    sub_item['photo'] = image
                     result['order_items'].append(sub_item)
                 return Response(
                     {'order': result},
